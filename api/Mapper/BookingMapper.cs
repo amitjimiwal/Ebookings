@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.DTO.Bookings;
 using Ebooking.DTO.Bookings;
 using Ebooking.Models;
 
@@ -20,6 +21,20 @@ namespace api.Mapper
                 NoOfTickets = bookTicketDTO.NoOfTickets,
                 TotalPrice = bookTicketDTO.TotalPrice,
                 BookedAt = DateTime.Now
+            };
+        }
+
+        public static BookingDTO CreateDTOFromBooking(this Bookings bookings)
+        {
+            return new BookingDTO
+            {
+                Name = bookings.Name,
+                Email = bookings.Email,
+                PhoneNumber = bookings.PhoneNumber,
+                EventId = bookings.EventId,
+                NoOfTickets = bookings.NoOfTickets,
+                TotalPrice = bookings.TotalPrice,
+                BookedAt = bookings.BookedAt
             };
         }
     }

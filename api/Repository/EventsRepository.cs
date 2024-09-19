@@ -33,5 +33,21 @@ namespace Ebooking.Repository
             }
             return EventData;
         }
+
+        public async Task<Events?> UpdateEventTicketCount(Guid guid, int tickets)
+        {
+            var EventData = await Db.Events.FirstOrDefaultAsync(eve => eve.Id == guid);
+            if (EventData == null)
+            {
+                return null;
+            }
+            if (EventData.AvailableTickets < tickets) return null;
+            //reduce tickets and update the data
+            EventData.AvailableTickets -= tickets;
+            Db.Entry(EventData).Property(r => r.AvailableTickets).IsModified = true;
+
+            await Db.SaveChangesAsync();
+            return EventData;
+        }
     }
 }

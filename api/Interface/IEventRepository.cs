@@ -10,5 +10,7 @@ namespace Ebooking.Interface
     {
         Task<List<Events>> GetAllEvents();
         Task<Events?> GetEventById(Guid id);
+
+        Task<Events?> UpdateEventTicketCount(Guid guid,int tickets);
     }
 }

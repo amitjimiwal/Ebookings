@@ -9,5 +9,8 @@ namespace Ebooking.Interface
     public interface IBookingRepository
     {
         Task<Bookings?> BookEvent(Bookings booking);
+        Task<int> GetBookingsCount(Guid eventId, string email);
+
+        Task<Bookings?> GetBookingByIDAsync(Guid guid);
     }
 }
