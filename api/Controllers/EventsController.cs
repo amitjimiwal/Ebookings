@@ -38,7 +38,9 @@ namespace Ebooking.Controllers
                 Venue = eve.Venue,
                 TicketPrice = eve.TicketPrice,
                 BannerImg = eve.BannerImg,
-                Category = eve.Category.Name
+                Category = eve.Category.Name,
+                AvailableTickets = eve.AvailableTickets,
+                MaxTicketsPerPerson = eve.MaxTicketsPerPerson
             });
             return Ok(EventsResponse);
         }

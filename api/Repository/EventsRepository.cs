@@ -23,5 +23,15 @@ namespace Ebooking.Repository
             var allEvents = await Db.Events.Include(cat => cat.Category).ToListAsync();
             return allEvents;
         }
+
+        public async Task<Events?> GetEventById(Guid id)
+        {
+            var EventData = await Db.Events.FirstOrDefaultAsync(eve => eve.Id == id);
+            if (EventData == null)
+            {
+                return null;
+            }
+            return EventData;
+        }
     }
 }

@@ -31,6 +31,9 @@ namespace Ebooking.Models
 
         public string BannerImg { get; set; }
 
+        public int AvailableTickets { get; set; } 
+        public int MaxTicketsPerPerson { get; set; }
+
         // Foreign key
         public Guid CategoryId { get; set; }
 

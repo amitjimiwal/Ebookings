@@ -24,9 +24,10 @@ namespace Ebooking.DTO.Events
         public string Description { get; set; }
 
         public string Venue { get; set; }
-
-        [Column(TypeName = "decimal(10, 2)")]
         public decimal TicketPrice { get; set; }
+
+        public int AvailableTickets { get; set; }
+        public int MaxTicketsPerPerson { get; set; }
 
         public string BannerImg { get; set; }
 
