@@ -15,10 +15,10 @@ namespace Ebooking.Data
         {
 
         }
-        
+
         //The database reference we wrap it in the DbContext
-        DbSet<Events> Events { get; set; }
-        DbSet<EventCategory> EventCategories { get; set; }
-        DbSet<Bookings> Bookings { get; set; }
+        public DbSet<Events> Events { get; set; }
+        public DbSet<EventCategory> EventCategories { get; set; }
+        public DbSet<Bookings> Bookings { get; set; }
     }
 }

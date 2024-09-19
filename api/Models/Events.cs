@@ -10,7 +10,7 @@ namespace Ebooking.Models
     [Table("Events")]
     public class Events
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string EventName { get; set; }
 
@@ -32,7 +32,7 @@ namespace Ebooking.Models
         public string BannerImg { get; set; }
 
         // Foreign key
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         // Navigation property
         public EventCategory Category { get; set; }

@@ -11,7 +11,7 @@ namespace api.Models
     [Table("EventsCategory")]
     public class EventCategory
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         public string Name { get; set; }

@@ -8,26 +8,26 @@ namespace Ebooking.Models
 {
     [Table("Bookings")]
     public class Bookings
-{
-    public int Id { get; set; }
+    {
+        public Guid Id { get; set; }
 
-    public string Name { get; set; }
+        public string Name { get; set; }
 
-    public string Email { get; set; }
+        public string Email { get; set; }
 
-    public long PhoneNumber { get; set; }
+        public long PhoneNumber { get; set; }
 
-    // Foreign key
-    public int EventId { get; set; }
+        // Foreign key
+        public Guid EventId { get; set; }
 
-    public Events Event { get; set; }
+        public Events Event { get; set; }
 
-    public int NoOfTickets { get; set; }
+        public int NoOfTickets { get; set; }
 
-    public DateTime BookedAt { get; set; }
+        public DateTime BookedAt { get; set; }
 
-    [Column(TypeName = "decimal(10, 2)")]
-    public decimal TotalPrice { get; set; }
-}
+        [Column(TypeName = "decimal(10, 2)")]
+        public decimal TotalPrice { get; set; }
+    }
 
 }

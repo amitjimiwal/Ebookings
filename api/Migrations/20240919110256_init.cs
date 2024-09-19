@@ -54,8 +54,7 @@ namespace Ebooking.Migrations
                 name: "EventsCategory",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -173,8 +172,7 @@ namespace Ebooking.Migrations
                 name: "Events",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EventName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EventTiming = table.Column<TimeSpan>(type: "time", nullable: false),
@@ -184,7 +182,7 @@ namespace Ebooking.Migrations
                     Venue = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TicketPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
                     BannerImg = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -201,12 +199,11 @@ namespace Ebooking.Migrations
                 name: "Bookings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false),
+                    EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NoOfTickets = table.Column<int>(type: "int", nullable: false),
                     BookedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(10,2)", nullable: false)
