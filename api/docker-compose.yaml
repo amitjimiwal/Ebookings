@@ -1,20 +1,18 @@
-version: '1'
+version: '1.1'
 services:
   db:
     container_name: eventbookingdb
-    image: 'mcr.microsoft.com/azure-sql-edge'
+    image: mcr.microsoft.com/azure-sql-edge
     ports:
       - 1433:1433
     volumes:
       - eventsdb:/var/opt/mssql/data
-    networks:
-      - finshark
     restart: always
     environment:
-      USER: 'sa'
-      ACCEPT_EULA: 'Y'
-      SA_PASSWORD: 'MyC0m9l&xP@ssw0rd'
-      MSSQL_PID: 'Developer'
+      MSSQL_USER: SA
+      ACCEPT_EULA: 1
+      MSSQL_SA_PASSWORD: Ebookingsapp@123
+      MSSQL_PID: Developer
 volumes:
   eventsdb:
     driver: local

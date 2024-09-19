@@ -10,6 +10,5 @@ namespace Ebooking.Controllers
     [Route("api/[controller]")]
     public class EventsController : ControllerBase
     {
-        
     }
 }
