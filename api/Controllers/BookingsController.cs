@@ -79,5 +79,15 @@ namespace Ebooking.Controllers
             //Convert it Into a DTO 
             return Ok(BookingData.CreateDTOFromBooking());
         }
+
+        [HttpDelete]
+        [Route("cancel/{guid}")]
+        public async Task<IActionResult> CancelEvent(Guid guid)
+        {
+            var DeleteBookings = BookingRepository.DeleteAllBookingsForEvent(guid);
+            var eventData = await EventRepository.DeleteEvent(guid);
+            if (DeleteBookings == true && eventData != null) return Ok("Successfully deleted the event");
+            return BadRequest("Error while deleting the Bookings for the event");
+        }
     }
 }

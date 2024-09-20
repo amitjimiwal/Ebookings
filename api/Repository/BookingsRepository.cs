@@ -23,6 +23,19 @@ namespace Ebooking.Repository
             return booking;
         }
 
+        public bool? DeleteAllBookingsForEvent(Guid eventID)
+        {
+            var BookingsForEventByUser = Db.Bookings.AsQueryable();
+            BookingsForEventByUser = BookingsForEventByUser.Where(e => e.EventId == eventID);
+            if (BookingsForEventByUser == null) return false;
+            //Delete EveryBooking for that event
+            foreach (var book in BookingsForEventByUser)
+            {
+                Db.Bookings.Remove(book);
+            }
+            return true;
+        }
+
         public async Task<Bookings?> GetBookingByIDAsync(Guid guid)
         {
             Bookings? BookingData = await Db.Bookings.FirstOrDefaultAsync(item => item.Id == guid);

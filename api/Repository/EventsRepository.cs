@@ -18,6 +18,18 @@ namespace Ebooking.Repository
             Db = dbContext;
         }
 
+        public async Task<Events?> DeleteEvent(Guid guid)
+        {
+            var EventData = await Db.Events.FirstOrDefaultAsync(eve => eve.Id == guid);
+            if (EventData == null)
+            {
+                return null;
+            }
+            
+            Db.Events.Remove(EventData);
+            return EventData;
+        }
+
         public async Task<List<Events>> GetAllEvents()
         {
             var allEvents = await Db.Events.Include(cat => cat.Category).ToListAsync();

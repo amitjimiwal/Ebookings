@@ -12,5 +12,7 @@ namespace Ebooking.Interface
         Task<int> GetBookingsCount(Guid eventId, string email);
 
         Task<Bookings?> GetBookingByIDAsync(Guid guid);
+
+        bool? DeleteAllBookingsForEvent(Guid eventID);
     }
 }
