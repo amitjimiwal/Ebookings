@@ -13,9 +13,11 @@ namespace Ebooking.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IEventRepository eventRepository;
-        public EventsController(IEventRepository repository)
+        private readonly IBookingRepository BookingRepository;
+        public EventsController(IEventRepository repository, IBookingRepository booking)
         {
             eventRepository = repository;
+            BookingRepository = booking;
         }
         [HttpGet]
         public async Task<IActionResult> GetEvents()
@@ -43,6 +45,16 @@ namespace Ebooking.Controllers
                 MaxTicketsPerPerson = eve.MaxTicketsPerPerson
             });
             return Ok(EventsResponse);
+        }
+
+        [HttpDelete]
+        [Route("cancel/{guid}")]
+        public async Task<IActionResult> CancelEvent(Guid guid)
+        {
+            var DeleteBookings = BookingRepository.DeleteAllBookingsForEvent(guid);
+            var eventData = await eventRepository.DeleteEvent(guid);
+            if (DeleteBookings == true && eventData != null) return Ok("Successfully deleted the event");
+            return BadRequest("Error while deleting the Bookings for the event");
         }
     }
 }
