@@ -4,6 +4,7 @@ using Ebooking.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebooking.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240922112753_CustomUserTable")]
+    partial class CustomUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,28 +31,30 @@ namespace Ebooking.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("AppLicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AppUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("BookedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("NoOfTickets")
                         .HasColumnType("int");
+
+                    b.Property<long>("PhoneNumber")
+                        .HasColumnType("bigint");
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(10, 2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppLicationUserId");
 
                     b.HasIndex("EventId");
 
@@ -61,10 +66,6 @@ namespace Ebooking.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("AvailableTickets")
                         .HasColumnType("int");
@@ -107,8 +108,6 @@ namespace Ebooking.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserID");
 
                     b.HasIndex("CategoryId");
 
@@ -345,29 +344,17 @@ namespace Ebooking.Migrations
 
             modelBuilder.Entity("Ebooking.Models.Bookings", b =>
                 {
-                    b.HasOne("api.Models.ApplicationUser", "AppLicationUser")
-                        .WithMany()
-                        .HasForeignKey("AppLicationUserId");
-
                     b.HasOne("Ebooking.Models.Events", "Event")
                         .WithMany("Bookings")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("AppLicationUser");
-
                     b.Navigation("Event");
                 });
 
             modelBuilder.Entity("Ebooking.Models.Events", b =>
                 {
-                    b.HasOne("api.Models.ApplicationUser", "applicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("api.Models.EventCategory", "Category")
                         .WithMany("Events")
                         .HasForeignKey("CategoryId")
@@ -375,8 +362,6 @@ namespace Ebooking.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-
-                    b.Navigation("applicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

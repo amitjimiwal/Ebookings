@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Models;
 
 namespace Ebooking.Models
 {
@@ -10,13 +11,10 @@ namespace Ebooking.Models
     public class Bookings
     {
         public Guid Id { get; set; }
+        public string AppUserID { get; set; }
 
-        public string Name { get; set; }
-
-        public string Email { get; set; }
-
-        public long PhoneNumber { get; set; }
-
+        //Navigation Property
+        public ApplicationUser AppLicationUser { get; set; }
         // Foreign key
         public Guid EventId { get; set; }
 

@@ -1,19 +1,17 @@
-version: '1.1'
+version: '3.8'
 services:
   db:
     container_name: eventbookingdb
     image: mcr.microsoft.com/azure-sql-edge
+    user: '0:0' # running the container as root
     ports:
-      - 1433:1433
+      - "1433:1433"
     volumes:
       - eventsdb:/var/opt/mssql/data
-    restart: always
     environment:
-      MSSQL_USER: SA
-      ACCEPT_EULA: 1
-      MSSQL_SA_PASSWORD: Ebookingsapp@123
-      MSSQL_PID: Developer
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Ebookingsapp@123"
+      MSSQL_PID: "Developer"
 volumes:
   eventsdb:
     driver: local
-

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Mapper;
 using Ebooking.DTO.Events;
 using Ebooking.Interface;
 using Microsoft.AspNetCore.Mvc;
@@ -28,22 +29,7 @@ namespace Ebooking.Controllers
                 return NotFound();
             }
             // Mapping the Events to EventDTO
-            var EventsResponse = EventsData.Select(eve => new EventDTO()
-            {
-                Id = eve.Id,
-                EventName = eve.EventName,
-                Date = eve.Date,
-                EventTiming = eve.EventTiming,
-                CreatedAt = eve.CreatedAt,
-                TotalTickets = eve.TotalTickets,
-                Description = eve.Description,
-                Venue = eve.Venue,
-                TicketPrice = eve.TicketPrice,
-                BannerImg = eve.BannerImg,
-                Category = eve.Category.Name,
-                AvailableTickets = eve.AvailableTickets,
-                MaxTicketsPerPerson = eve.MaxTicketsPerPerson
-            });
+            var EventsResponse = EventsData.Select(eve => eve.CreateDTOFromEvent());
             return Ok(EventsResponse);
         }
 
