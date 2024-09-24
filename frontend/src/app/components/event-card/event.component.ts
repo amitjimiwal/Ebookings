@@ -1,16 +1,17 @@
 import { Component, Input } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { EventData } from '../../models/interface/event';
-import { faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'event-description',
+  selector: 'event-card',
   standalone: true,
-  imports: [FontAwesomeModule],
-  templateUrl: './event-description.component.html',
-  styleUrl: './event-description.component.css'
+  imports: [RouterModule, FontAwesomeModule],
+  templateUrl: './event.component.html',
+  styleUrl: './event.component.css'
 })
-export class EventDescriptionComponent {
+export class EventComponent {
   @Input() event: EventData | undefined = undefined;
   venueIcon = faLocationDot
   calenderIcon = faCalendarAlt

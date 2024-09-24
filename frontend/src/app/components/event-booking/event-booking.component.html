@@ -21,26 +21,26 @@
       />
     </div>
     <div class="mb-4">
-      <label for="phone" class="block mb-2">Phone</label>
+      <label for="phoneNumber" class="block mb-2">Phone</label>
       <input
         type="tel"
-        id="phone"
-        formControlName="phone"
+        id="phoneNumber"
+        formControlName="phoneNumber"
         class="w-full px-3 py-2 border rounded"
       />
     </div>
     <div class="mb-4">
-      <label for="tickets" class="block mb-2">Number of Tickets</label>
+      <label for="noOfTickets" class="block mb-2">Number of Tickets</label>
       <input
         type="number"
-        id="tickets"
-        formControlName="tickets"
+        id="noOfTickets"
+        formControlName="noOfTickets"
         min="1"
         class="w-full px-3 py-2 border rounded"
       />
     </div>
     <div class="mb-4">
-      <p class="text-xl font-bold">Total Price: ${{ totalAmount }}</p>
+      <p class="text-xl font-bold">Total Price: ₹{{ totalPrice }}</p>
     </div>
     <button
       type="submit"

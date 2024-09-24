@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { EventData } from '../models/interface/event';
+import { inject, Injectable } from '@angular/core';
+import { EventData } from '../../models/interface/event';
 import { Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 export const dummyEventData: EventData[] = [
   {
     id: "e1c5e7e2-1234-4567-8901-123456789012",
@@ -83,15 +84,12 @@ export const dummyEventData: EventData[] = [
   providedIn: 'root'
 })
 export class EventService {
-  private eventsData: EventData[] = [];
+  http = inject(HttpClient);
   constructor() { }
   getEvents(): Observable<EventData[]> {
-    // dummy injection of events data
-    this.eventsData = dummyEventData
-    return of(this.eventsData);
+    return this.http.get<EventData[]>('http://localhost:5077/api/Events');
   }
-
-  getEventById(id: string): Observable<EventData | null> {
-    return of(this.eventsData.find(event => event.id === id) || null);
+  getEventById(id: string): Observable<EventData> {
+    return this.http.get<EventData>(`http://localhost:5077/api/Events/${id}`);
   }
 }
