@@ -25,7 +25,7 @@ namespace Ebooking.Repository
             {
                 return null;
             }
-            
+
             Db.Events.Remove(EventData);
             return EventData;
         }
@@ -38,7 +38,7 @@ namespace Ebooking.Repository
 
         public async Task<Events?> GetEventById(Guid id)
         {
-            var EventData = await Db.Events.FirstOrDefaultAsync(eve => eve.Id == id);
+            var EventData = await Db.Events.Include(e => e.Category).FirstOrDefaultAsync(eve => eve.Id == id);
             if (EventData == null)
             {
                 return null;

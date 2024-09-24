@@ -35,9 +35,9 @@ namespace Ebooking.Models
         public int MaxTicketsPerPerson { get; set; }
 
         // for user creating events
-        public string ApplicationUserID { get; set; }
+        // public string ApplicationUserID { get; set; }
 
-        public ApplicationUser applicationUser { get; set; }
+        // public ApplicationUser applicationUser { get; set; }
 
         // Foreign key
         public Guid CategoryId { get; set; }

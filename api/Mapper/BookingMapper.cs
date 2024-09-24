@@ -14,9 +14,9 @@ namespace api.Mapper
         {
             return new Bookings
             {
-                // Name = bookTicketDTO.Name,
-                // Email = bookTicketDTO.Email,
-                // PhoneNumber = bookTicketDTO.PhoneNumber,
+                Name = bookTicketDTO.Name,
+                Email = bookTicketDTO.Email,
+                PhoneNumber = bookTicketDTO.PhoneNumber,
                 EventId = bookTicketDTO.EventId,
                 NoOfTickets = bookTicketDTO.NoOfTickets,
                 TotalPrice = bookTicketDTO.TotalPrice,
@@ -28,9 +28,10 @@ namespace api.Mapper
         {
             return new BookingDTO
             {
-                // Name = bookings.Name,
-                // Email = bookings.Email,
-                // PhoneNumber = bookings.PhoneNumber,
+                Id = bookings.Id,
+                Name = bookings.Name,
+                Email = bookings.Email,
+                PhoneNumber = bookings.PhoneNumber,
                 EventId = bookings.EventId,
                 NoOfTickets = bookings.NoOfTickets,
                 TotalPrice = bookings.TotalPrice,

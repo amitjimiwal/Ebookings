@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using api.Mapper;
 using Ebooking.DTO.Events;
 using Ebooking.Interface;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebooking.Controllers
@@ -41,6 +42,15 @@ namespace Ebooking.Controllers
             var eventData = await eventRepository.DeleteEvent(guid);
             if (DeleteBookings == true && eventData != null) return Ok("Successfully deleted the event");
             return BadRequest("Error while deleting the Bookings for the event");
+        }
+
+        [HttpGet]
+        [Route("{guid}")]
+        public async Task<IActionResult> GetEvent(Guid guid)
+        {
+            var eventData = await eventRepository.GetEventById(guid);
+            if (eventData == null) return NotFound();
+            return Ok(eventData.CreateDTOFromEvent());
         }
     }
 }

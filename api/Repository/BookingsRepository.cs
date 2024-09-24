@@ -41,17 +41,16 @@ namespace Ebooking.Repository
             Bookings? BookingData = await Db.Bookings.FirstOrDefaultAsync(item => item.Id == guid);
 
             if (BookingData == null) return null;
-
             return BookingData;
         }
 
         public async Task<int> GetBookingsCount(Guid eventId, string email)
         {
             //storing the data as queryable
-            var BookingsForEventByUser = Db.Bookings.Include(s => s.AppLicationUser).AsQueryable();
+            var BookingsForEventByUser = Db.Bookings.AsQueryable();
 
             //filter out the bookings of user
-            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppLicationUser.Email == email && booking.EventId == eventId);
+            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.EventId == eventId);
 
             return await BookingsForEventByUser.CountAsync();
         }
