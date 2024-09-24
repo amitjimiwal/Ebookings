@@ -1,0 +1,63 @@
+@if (event) {
+<event-description [event]="event"></event-description>
+<div class="container mt-8 w-full mx-auto">
+  <form [formGroup]="bookingForm" (ngSubmit)="onSubmit()" class="max-w-lg">
+    <div class="mb-4">
+      <label for="name" class="block mb-2">Name</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="email" class="block mb-2">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="phone" class="block mb-2">Phone</label>
+      <input
+        type="tel"
+        id="phone"
+        formControlName="phone"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="tickets" class="block mb-2">Number of Tickets</label>
+      <input
+        type="number"
+        id="tickets"
+        formControlName="tickets"
+        min="1"
+        class="w-full px-3 py-2 border rounded"
+      />
+    </div>
+    <div class="mb-4">
+      <p class="text-xl font-bold">Total Price: ${{ totalAmount }}</p>
+    </div>
+    <button
+      type="submit"
+      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:cursor-not-allowed"
+      [disabled]="!bookingForm.valid"
+    >
+      Book Now
+    </button>
+  </form>
+</div>
+} @else{
+<div class="container mx-auto mt-8">
+  <h1 class="text-3xl font-bold mb-4">Event Not Found</h1>
+  <a
+    [routerLink]="['/events']"
+    class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    >Back to Events</a
+  >
+</div>
+}

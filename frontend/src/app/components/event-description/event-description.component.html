@@ -1,0 +1,41 @@
+<div class="container mx-auto bg-gray-100 px-3 py-4 rounded-xl">
+  <div class="flex justify-around my-6">
+    <div>
+      <img
+        [src]="event?.bannerImg"
+        alt="Event Image"
+        class="aspect-video w-1/2 h-auto rounded-lg"
+      />
+    </div>
+    <div class="my-auto">
+      <div class="p-6 mx-auto">
+        <h3 class="text-3xl font-semibold text-gray-800 mb-4">
+          {{ event?.eventName }}
+        </h3>
+
+        <p class="text-gray-600">
+          <fa-icon [icon]="calenderIcon" class="mr-2"></fa-icon>
+          {{ event?.date?.toDateString() }}
+        </p>
+
+        <p class="text-gray-600">
+          <fa-icon [icon]="venueIcon" class="mr-2"></fa-icon>
+          {{ event?.venue }}
+        </p>
+        <p class="text-gray-600">
+          <span class="font-medium">Price:</span> ₹{{ event?.ticketPrice }}
+        </p>
+
+        <p class="text-gray-600">
+          <span class="font-medium">Max Tickets Allowed:</span>
+          {{ event?.maxTicketsPerPerson }}
+        </p>
+
+        <p class="text-gray-600">
+          <span class="font-medium">Available Tickets:</span>
+          {{ event?.availableTickets }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

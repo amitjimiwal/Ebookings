@@ -1,3 +1,21 @@
 import { Routes } from '@angular/router';
+import { EventsListComponent } from './components/events-list/events-list.component';
+import { EventBookingComponent } from './components/event-booking/event-booking.component';
+import { SuccessMessageComponent } from './components/success-message/success-message.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+     {
+          path: '',
+          redirectTo: 'events',
+          pathMatch: 'full'
+     }, {
+          path: 'events',
+          component: EventsListComponent
+     }, {
+          path: 'booking/:id',
+          component: EventBookingComponent
+     }, {
+          path: 'success',
+          component: SuccessMessageComponent
+     }
+];
