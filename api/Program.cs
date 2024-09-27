@@ -1,3 +1,4 @@
+using api.Handlers;
 using api.Models;
 using Ebooking.Data;
 using Ebooking.Interface;
@@ -32,8 +33,10 @@ builder.Services.AddScoped<IEventRepository, EventsRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingsRepository>();
 
 builder.Services.AddAuthorization();
-builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -63,7 +66,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-//CORS
+
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
@@ -75,14 +78,17 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
+// builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    //CORS SETUP - for development environment
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(MyAllowSpecificOrigins);
 }
-app.UseCors(MyAllowSpecificOrigins);
+app.UseExceptionHandler(_ => { });
 //add the middleware: 
 app.MapIdentityApi<ApplicationUser>();
 app.UseHttpsRedirection();

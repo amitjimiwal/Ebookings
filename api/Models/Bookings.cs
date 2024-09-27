@@ -11,10 +11,10 @@ namespace Ebooking.Models
     public class Bookings
     {
         public Guid Id { get; set; }
-        // public string AppUserID { get; set; }
+        public string AppUserID { get; set; }
 
-        // //Navigation Property
-        // public ApplicationUser AppLicationUser { get; set; }
+        //Navigation Property
+        public ApplicationUser AppLicationUser { get; set; }
         // Foreign key
         public string Name { get; set; }
 

@@ -37,7 +37,6 @@ export class EventBookingComponent implements OnInit {
   }
   ngOnInit(): void {
     const eventId = this.route.snapshot.params['id'];
-
     // Fetch the corresponding event data
     this.eventService.getEventById(eventId).subscribe(event => {
       if (event) this.event = event;
@@ -69,11 +68,13 @@ export class EventBookingComponent implements OnInit {
           } else {
             console.error('Form submission failed');
             console.log(response.message);
+            alert(response.error);
           }
         },
         error: (error) => {
           // Handle error
           console.error('Error submitting form', error);
+          alert(error.error);
         }
       });
     } else {
