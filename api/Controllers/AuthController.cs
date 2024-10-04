@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using api.DTO.Auth;
+using api.Interface;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -19,10 +20,12 @@ namespace api.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly ITokenService tokenService;
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            this.tokenService = tokenService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDTO registerUserDTO)
@@ -86,9 +89,14 @@ namespace api.Controllers
             }
 
             //TODO: generate token steps
+            var token = tokenService.CreateToken(user);
 
             //send back response and token
-            return Ok("User Logged in Successfully");
+            return Ok(new
+            {
+                token,
+                user
+            });
         }
 
         [Authorize]

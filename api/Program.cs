@@ -1,4 +1,5 @@
 using api.Handlers;
+using api.Interface;
 using api.Models;
 using Ebooking.Data;
 using Ebooking.Interface;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using stockapi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 builder.Services.AddScoped<IEventRepository, EventsRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingsRepository>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 //add identity of application user as Dependency Injection
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -121,10 +124,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors(MyAllowSpecificOrigins);
 }
-app.UseExceptionHandler(_ => { });
 //add the middleware: 
-// app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseExceptionHandler(new ExceptionHandlerOptions()
+{
+    AllowStatusCode404Response = true,
+    ExceptionHandlingPath = "/error"
+});
 app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();

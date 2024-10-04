@@ -6,6 +6,7 @@ using api.Mapper;
 using Ebooking.DTO.Bookings;
 using Ebooking.Interface;
 using Ebooking.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebooking.Controllers
@@ -21,6 +22,8 @@ namespace Ebooking.Controllers
             BookingRepository = repository;
             EventRepository = eventRepository;
         }
+
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> BookEvent([FromBody] BookTicketDTO bookTicketDTO)
         {
@@ -68,6 +71,7 @@ namespace Ebooking.Controllers
             return CreatedAtAction(nameof(GetBookingById), new { guid = booking.Id }, booking.CreateDTOFromBooking());
         }
 
+        [Authorize]
         [HttpGet]
         [Route("{guid}")]
         public async Task<IActionResult> GetBookingById([FromRoute] Guid guid)
