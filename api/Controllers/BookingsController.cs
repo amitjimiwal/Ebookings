@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Mapper;
+using api.Models;
 using Ebooking.DTO.Bookings;
 using Ebooking.Interface;
 using Ebooking.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using stockapi.Extensions;
 
 namespace Ebooking.Controllers
 {
@@ -17,10 +20,13 @@ namespace Ebooking.Controllers
     {
         private readonly IBookingRepository BookingRepository;
         private readonly IEventRepository EventRepository;
-        public BookingsController(IBookingRepository repository, IEventRepository eventRepository)
+
+        private readonly UserManager<ApplicationUser> userManager;
+        public BookingsController(IBookingRepository repository, IEventRepository eventRepository, UserManager<ApplicationUser> manager)
         {
             BookingRepository = repository;
             EventRepository = eventRepository;
+            userManager = manager;
         }
 
         [Authorize]
@@ -30,6 +36,13 @@ namespace Ebooking.Controllers
             if (!ModelState.IsValid) //check if model state is valid
             {
                 return BadRequest(ModelState);
+            }
+            //get the user details
+            string UserName = User.GetUserName();
+            var appUser = await userManager.FindByNameAsync(UserName);
+            if (appUser == null)
+            {
+                return BadRequest("User not found");
             }
             //get event data
             var eventData = await EventRepository.GetEventById(bookTicketDTO.EventId);
@@ -56,7 +69,7 @@ namespace Ebooking.Controllers
             }
 
             //create booking object from DTO
-            var BookingObject = bookTicketDTO.CreateBookingFromDTO();
+            var BookingObject = bookTicketDTO.CreateBookingFromDTO(appUser.Id);
 
             //Update the events table available tickets
             var eventObj = await EventRepository.UpdateEventTicketCount(bookTicketDTO.EventId, bookTicketDTO.NoOfTickets);
@@ -82,6 +95,29 @@ namespace Ebooking.Controllers
 
             //Convert it Into a DTO 
             return Ok(BookingData.CreateDTOFromBooking());
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetBookingsForUser()
+        {
+            //get the username from claims
+            string UserName = User.GetUserName();
+            var appUser = await userManager.FindByNameAsync(UserName);
+            if (appUser == null)
+            {
+                return BadRequest("User not found");
+            }
+            //get all bookings for the user
+            var bookings = await BookingRepository.GetBookingsForUser(appUser.Id);
+            //traverse and print
+            if (bookings == null)
+            {
+                return NotFound("No Bookings Found");
+            }
+            //convert to DTO
+            var bookingsDTO = bookings.Select(booking => booking.CreateDTOFromBooking());
+            return Ok(bookingsDTO);
         }
     }
 }

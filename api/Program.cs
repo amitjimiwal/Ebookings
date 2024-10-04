@@ -67,7 +67,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(
             System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Secret"])
-        )
+        ),
+        ClockSkew = TimeSpan.Zero
     };
 });
 //add authorization

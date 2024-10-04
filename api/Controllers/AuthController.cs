@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using api.DTO.Auth;
 using api.Interface;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using stockapi.Extensions;
 
 namespace api.Controllers
 {
@@ -105,6 +108,15 @@ namespace api.Controllers
         {
             await _signInManager.SignOutAsync();
             return Ok("User Logged out Successfully");
+        }
+
+        [Authorize]
+        [HttpGet("userinfo")]
+        public IActionResult GetUserInfo()
+        {
+            //dummy route to get the user from name
+            var username = User.GetUserName();
+            return Ok(new { Username = username });
         }
     }
 }

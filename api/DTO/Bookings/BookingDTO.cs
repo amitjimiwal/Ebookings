@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ebooking.Models;
 
 namespace api.DTO.Bookings
 {
@@ -15,5 +16,6 @@ namespace api.DTO.Bookings
         public int NoOfTickets { get; set; }
         public DateTime BookedAt { get; set; }
         public decimal TotalPrice { get; set; }
+        public string AppUserID { get; set; } = string.Empty;
     }
 }

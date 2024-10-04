@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using stockapi.Extensions;
 
 namespace Ebooking.Controllers
 {
@@ -68,32 +69,26 @@ namespace Ebooking.Controllers
         [Authorize]
         public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO createEventDTO)
         {
-            string userID = "";
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var newEvent = createEventDTO.CreateEventFromDTO(userID);
+            //get the username from claims
+            string UserName = User.GetUserName();
+            var appUser = await userManager.FindByNameAsync(UserName);
+            if (appUser == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            //create new event
+            var newEvent = createEventDTO.CreateEventFromDTO(appUser.Id);
             var CreatedEvent = await eventRepository.CreateEvent(newEvent);
             if (CreatedEvent == null)
             {
                 return StatusCode(500, "Error while creating the event");
             }
-            return Ok(CreatedEvent.CreateDTOFromEvent());
+            return CreatedAtAction(nameof(GetEvent), new { guid = CreatedEvent.Id }, CreatedEvent.CreateDTOFromEvent());
         }
-
-    [Authorize]
-    [HttpGet("userinfo")]
-    public IActionResult GetUserInfo()
-    {
-        // Get the email (which you've stored in the JwtRegisteredClaimNames.Email claim)
-        var email = HttpContext.User.FindFirstValue(JwtRegisteredClaimNames.Email);
-
-        // Get the username (which you've stored in the JwtRegisteredClaimNames.GivenName claim)
-        var username = User.FindFirstValue(JwtRegisteredClaimNames.GivenName);
-
-        // You can return this information or use it as needed
-        return Ok(new { Email = email, Username = username });
-    }
     }
 }

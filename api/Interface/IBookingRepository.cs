@@ -14,5 +14,6 @@ namespace Ebooking.Interface
         Task<Bookings?> GetBookingByIDAsync(Guid guid);
 
         bool? DeleteAllBookingsForEvent(Guid eventID);
+        Task<List<Bookings>> GetBookingsForUser(string userId);
     }
 }

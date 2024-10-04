@@ -54,5 +54,12 @@ namespace Ebooking.Repository
 
             return await BookingsForEventByUser.CountAsync();
         }
+
+        public async Task<List<Bookings>> GetBookingsForUser(string userId)
+        {
+            var bookingsData = Db.Bookings.Include(x => x.Event).AsQueryable();
+            var b = await bookingsData.Where(x => x.AppUserID == userId).ToListAsync();
+            return b;
+        }
     }
 }
