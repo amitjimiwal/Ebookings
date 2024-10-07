@@ -136,19 +136,10 @@ namespace Ebooking.Controllers
             }
 
             //get the event details
-            if (!string.IsNullOrEmpty(cancelBookingDTO.EventID.ToString()))
-            {
-                return BadRequest("Event ID is required.");
-            }
             var eventData = await EventRepository.GetEventById(cancelBookingDTO.EventID);
             if (eventData == null)
             {
                 return NotFound("Event Not Found");
-            }
-            //get the booking details of the user
-            if (!string.IsNullOrEmpty(cancelBookingDTO.BookingID.ToString()))
-            {
-                return BadRequest("Event ID is required.");
             }
             var bookingData = await BookingRepository.GetBookingByIDAsync(cancelBookingDTO.BookingID);
             if (bookingData == null)
