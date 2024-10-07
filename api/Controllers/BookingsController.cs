@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.DTO.Bookings;
 using api.Mapper;
 using api.Models;
 using Ebooking.DTO.Bookings;
@@ -116,8 +117,64 @@ namespace Ebooking.Controllers
                 return NotFound("No Bookings Found");
             }
             //convert to DTO
-            var bookingsDTO = bookings.Select(booking => booking.CreateDTOFromBooking());
+            var bookingsDTO = bookings.Select(booking => booking.CreateUserBookingDTOFromBooking());
             return Ok(bookingsDTO);
+        }
+
+        [HttpDelete("cancel")]
+        [Authorize]
+        public async Task<IActionResult> CancelBooking([FromBody] CancelBookingDTO cancelBookingDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var appUser = await userManager.FindByIdAsync(cancelBookingDTO.UserID.ToString());
+            if (appUser == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            //get the event details
+            if (!string.IsNullOrEmpty(cancelBookingDTO.EventID.ToString()))
+            {
+                return BadRequest("Event ID is required.");
+            }
+            var eventData = await EventRepository.GetEventById(cancelBookingDTO.EventID);
+            if (eventData == null)
+            {
+                return NotFound("Event Not Found");
+            }
+            //get the booking details of the user
+            if (!string.IsNullOrEmpty(cancelBookingDTO.BookingID.ToString()))
+            {
+                return BadRequest("Event ID is required.");
+            }
+            var bookingData = await BookingRepository.GetBookingByIDAsync(cancelBookingDTO.BookingID);
+            if (bookingData == null)
+            {
+                return NotFound("Booking Not Found");
+            }
+
+            //check if current date and event date has greater than 2 days difference
+            if (DateTime.Now.Subtract(eventData.Date).Days > 2)
+            {
+                return BadRequest("Can't Cancel Booking 2 days before the event.");
+            }
+
+            //delete the booking 
+            var bookingDeleted = BookingRepository.DeleteBooking(cancelBookingDTO.BookingID);
+            if (bookingDeleted == false)
+            {
+                return StatusCode(500, "An error occurred while deleting the booking.");
+            }
+            //update the event available tickets
+            var eventObj = await EventRepository.IncreaseEventTicketCount(cancelBookingDTO.EventID, bookingData.NoOfTickets);
+            if (eventObj == null)
+            {
+                return StatusCode(500, "An error occurred while updating the event tickets.");
+            }
+            return Ok();
         }
     }
 }

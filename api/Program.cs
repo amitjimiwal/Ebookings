@@ -77,7 +77,7 @@ builder.Services.AddAuthorization();
 
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Stock Backend API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Booking Backend API", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -103,6 +103,10 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>

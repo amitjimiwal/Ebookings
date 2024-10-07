@@ -15,5 +15,6 @@ namespace Ebooking.Interface
         Task<Events?> DeleteEvent(Guid guid);
 
         Task<Events> CreateEvent(Events events);
+        Task<Events?> IncreaseEventTicketCount(Guid guid, int tickets);
     }
 }

@@ -118,5 +118,55 @@ namespace api.Controllers
             var username = User.GetUserName();
             return Ok(new { Username = username });
         }
+
+        [Authorize]
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO updateUserDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //get the user from the claims
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+            Console.WriteLine($"{updateUserDTO.Email} {updateUserDTO.PhoneNumber} {updateUserDTO.UserName}");
+            //update the user details
+            if (updateUserDTO.Email != null && updateUserDTO.Email != "") user.Email = updateUserDTO.Email;
+            if (updateUserDTO.PhoneNumber != null && updateUserDTO.PhoneNumber != "") user.PhoneNumber = updateUserDTO.PhoneNumber;
+            if (updateUserDTO.UserName != null && updateUserDTO.UserName != "")
+            {
+                user.UserName = updateUserDTO.UserName;
+            }
+
+
+            //update the user
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return StatusCode(500, result.Errors);
+            }
+
+            //password updates
+            if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
+            {
+                var userUPDATED = await _userManager.ChangePasswordAsync(user, updateUserDTO.OldPassWord, updateUserDTO.NewPassWord);
+                if (!userUPDATED.Succeeded)
+                {
+                    return StatusCode(500, userUPDATED.Errors);
+                }
+            }
+
+            return Ok(new
+            {
+                message = "User Updated Successfully",
+                user
+            });
+        }
     }
 }

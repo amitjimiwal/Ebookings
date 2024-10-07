@@ -36,6 +36,14 @@ namespace Ebooking.Repository
             return true;
         }
 
+        public bool? DeleteBooking(Guid bookingID)
+        {
+            var BookingData = Db.Bookings.FirstOrDefault(item => item.Id == bookingID);
+            if (BookingData == null) return false;
+            Db.Bookings.Remove(BookingData);
+            return true;
+        }
+
         public async Task<Bookings?> GetBookingByIDAsync(Guid guid)
         {
             Bookings? BookingData = await Db.Bookings.FirstOrDefaultAsync(item => item.Id == guid);
