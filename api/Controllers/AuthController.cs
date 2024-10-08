@@ -7,6 +7,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using api.DTO.Auth;
 using api.Interface;
+using api.Mapper;
 using api.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -98,7 +99,7 @@ namespace api.Controllers
             return Ok(new
             {
                 token,
-                user
+                user = user.CreateUserDTOfromUser()
             });
         }
 
@@ -145,13 +146,6 @@ namespace api.Controllers
             }
 
 
-            //update the user
-            var result = await _userManager.UpdateAsync(user);
-            if (!result.Succeeded)
-            {
-                return StatusCode(500, result.Errors);
-            }
-
             //password updates
             if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
             {
@@ -162,10 +156,13 @@ namespace api.Controllers
                 }
             }
 
+            //save changes
+            await _userManager.UpdateAsync(user);
+
             return Ok(new
             {
                 message = "User Updated Successfully",
-                user
+                user = user.CreateUserDTOfromUser()
             });
         }
     }
