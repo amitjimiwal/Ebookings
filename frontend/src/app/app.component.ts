@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 import { EventsListComponent } from './components/events-list/events-list.component';
 import { EventBookingComponent } from './components/event-booking/event-booking.component';
 import { SuccessMessageComponent } from './components/booking-success/success-message.component';
 import { EventDescriptionComponent } from './components/event-description/event-description.component';
 import { EventComponent } from './components/event-card/event.component';
+import { AuthService } from './services/auth/auth-service.service';
 
 @Component({
   selector: 'app-root',
@@ -14,5 +15,12 @@ import { EventComponent } from './components/event-card/event.component';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  authService = inject(AuthService);
+  constructor(private router: Router) {
+  }
   title = 'EBookings';
+  logout(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

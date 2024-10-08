@@ -7,12 +7,31 @@
       <h1 class="text-xl font-bold ml-3 text-blue-600">EBookings</h1>
     </a>
     <!-- Nav links -->
-    <div>
+    <div class="flex gap-4">
       <a
         [routerLink]="['/events']"
         class="text-black text-xl font-bold hover:text-gray-300"
         >Events</a
       >
+      @if(authService.isAuthenticated()){
+      <button
+        class="text-black text-xl font-bold hover:text-gray-300"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+      } @else{
+      <a
+        [routerLink]="['/login']"
+        class="text-black text-xl font-bold hover:text-gray-300"
+        >Login</a
+      >
+      <a
+        [routerLink]="['/signup']"
+        class="text-black text-xl font-bold hover:text-gray-300"
+        >Register</a
+      >
+      }
     </div>
   </div>
 </nav>

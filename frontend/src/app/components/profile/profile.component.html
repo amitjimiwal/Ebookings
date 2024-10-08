@@ -1,0 +1,121 @@
+<div
+  class="min-h-screen bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center p-4"
+>
+  <div
+    class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full space-y-8 transform hover:scale-105 transition duration-300"
+  >
+    @if (isEditing) {
+    <h2 class="text-2xl font-bold text-center text-indigo-600">Edit Profile</h2>
+    <p>Only fill the data that you want to update</p>
+    <p>
+      <b>Note:</b> old and new password both required when you want to update
+      password
+    </p>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div>
+        <label for="userName" class="block text-sm font-medium text-gray-700"
+          >Username</label
+        >
+        <input
+          id="userName"
+          formControlName="userName"
+          type="text"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700"
+          >Email</label
+        >
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div>
+        <label for="phoneNumber" class="block text-sm font-medium text-gray-700"
+          >Phone Number</label
+        >
+        <input
+          id="phoneNumber"
+          formControlName="phoneNumber"
+          type="tel"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div>
+        <label for="oldPassword" class="block text-sm font-medium text-gray-700"
+          >Old Password</label
+        >
+        <input
+          id="oldPassword"
+          formControlName="oldPassword"
+          type="tel"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div>
+        <label for="newPassword" class="block text-sm font-medium text-gray-700"
+          >New Password</label
+        >
+        <input
+          id="newPassword"
+          formControlName="newPassword"
+          type="tel"
+          class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+      <div class="flex space-x-4">
+        <button
+          type="submit"
+          [disabled]="!profileForm.valid"
+          class="flex-1 bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 disabled:opacity-50"
+        >
+          Save Changes
+        </button>
+        <button
+          type="button"
+          (click)="toggleEdit()"
+          class="flex-1 bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+    } @else {
+    <h2 class="text-3xl font-bold text-center text-indigo-600">User Profile</h2>
+    <div class="space-y-4">
+      <div class="bg-indigo-50 p-4 rounded-md">
+        <p class="text-gray-700">
+          <span class="font-semibold text-indigo-600">Username:</span>
+          {{ user?.userName }}
+        </p>
+        <p class="text-gray-700">
+          <span class="font-semibold text-indigo-600">Email:</span>
+          {{ user?.email }}
+        </p>
+        <p class="text-gray-700">
+          <span class="font-semibold text-indigo-600">Phone Number:</span>
+          {{ user?.phoneNumber }}
+        </p>
+        <p class="text-gray-700">
+          <span class="font-semibold text-indigo-600">Created At:</span>
+          {{ user?.createdAt | date : "medium" }}
+        </p>
+        <p class="text-gray-700">
+          <span class="font-semibold text-indigo-600">User ID:</span>
+          {{ user?.id }}
+        </p>
+      </div>
+      <button
+        (click)="toggleEdit()"
+        class="w-full bg-indigo-500 text-white py-2 rounded-md hover:bg-indigo-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+      >
+        Edit Profile
+      </button>
+    </div>
+    }
+  </div>
+</div>
