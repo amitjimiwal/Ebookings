@@ -17,4 +17,11 @@ export class BookingService {
     });
     return this.http.post('http://localhost:5077/api/Bookings', formdata, { headers });
   }
+
+  getUserBookings(): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenStorage.getToken()}`
+    });
+    return this.http.get('http://localhost:5077/api/Bookings', { headers });
+  }
 }
