@@ -1,16 +1,20 @@
 <div class="bg-white shadow-md rounded-lg p-4 space-x-2 space-y-2">
-  <img
+  <!-- <img
     [src]="event?.bannerImg"
     alt="Event Image"
     class="w-full h-auto aspect-video object-cover rounded-lg"
-  />
+  /> -->
   <h2 class="text-xl font-semibold">{{ event?.eventName }}</h2>
   <p class="text-gray-600">
-    <fa-icon [icon]="calenderIcon" class="mr-2"></fa-icon
-    >{{ event?.date}}
+    <fa-icon [icon]="calenderIcon" class="mr-2"></fa-icon>{{ event?.date }}
   </p>
   <p class="text-gray-600 space-x-2">
     <fa-icon [icon]="venueIcon" class="mr-2"></fa-icon>{{ event?.venue }}
+  </p>
+  <p class="text-lg mt-2">
+    @if (event?.availableTickets==0) {
+    <span class="text-red-500">Sold Out</span> } @else {
+    {{ event?.availableTickets }} left }
   </p>
   <p class="text-lg font-bold mt-2">₹{{ event?.ticketPrice }}</p>
 

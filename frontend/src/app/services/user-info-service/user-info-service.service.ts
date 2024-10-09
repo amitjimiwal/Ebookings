@@ -3,13 +3,14 @@ import { TokenService } from '../token-service/token-service.service';
 import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
 import { map, Observable } from 'rxjs';
 import { UpdateUserDto } from '../../models/interface/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserInfoService {
   private readonly USER_TOKEN_NAME = 'user_info';
-  constructor(private tokenStorage: TokenService, private http: HttpClient) { }
+  constructor(private tokenStorage: TokenService, private http: HttpClient, private router: Router) { }
   //setUser
   setUser(user: any): void {
     localStorage.setItem(this.USER_TOKEN_NAME, JSON.stringify(user));
@@ -34,7 +35,9 @@ export class UserInfoService {
 
     //pipe is used here to intercept the response and do some operation on it
     return this.http.put('http://localhost:5077/api/Auth/update', user, { headers }).pipe(map((data: any) => {
-      this.setUser(data.user);
+      this.removeUser();
+      this.tokenStorage.removeToken();
+      this.router.navigate(['/login']);
     }));
   }
 }
