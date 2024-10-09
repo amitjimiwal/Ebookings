@@ -24,4 +24,11 @@ export class BookingService {
     });
     return this.http.get('http://localhost:5077/api/Bookings', { headers });
   }
+
+  cancelBooking(bookingId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.tokenStorage.getToken()}`
+    });
+    return this.http.delete(`http://localhost:5077/api/Bookings/cancel/${bookingId}`, { headers });
+  }
 }

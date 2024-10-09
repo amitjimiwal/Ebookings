@@ -121,30 +121,41 @@ namespace Ebooking.Controllers
             return Ok(bookingsDTO);
         }
 
-        [HttpDelete("cancel")]
         [Authorize]
-        public async Task<IActionResult> CancelBooking([FromBody] CancelBookingDTO cancelBookingDTO)
+
+        [HttpDelete("cancel/{cancelBookingID}")]
+        public async Task<IActionResult> CancelBooking([FromRoute] Guid cancelBookingID)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var appUser = await userManager.FindByIdAsync(cancelBookingDTO.UserID.ToString());
+            string UserName = User.GetUserName();
+            var appUser = await userManager.FindByNameAsync(UserName);
             if (appUser == null)
             {
                 return BadRequest("User not found");
             }
 
-            //get the event details
-            var eventData = await EventRepository.GetEventById(cancelBookingDTO.EventID);
-            if (eventData == null)
-            {
-                return NotFound("Event Not Found");
-            }
-            var bookingData = await BookingRepository.GetBookingByIDAsync(cancelBookingDTO.BookingID);
+            //get the booking details
+            var bookingData = await BookingRepository.GetBookingByIDAsync(cancelBookingID);
             if (bookingData == null)
             {
                 return NotFound("Booking Not Found");
+            }
+
+            //check if the booking is done by the user
+            if (bookingData.AppUserID != appUser.Id)
+            {
+                return BadRequest("You can't cancel this booking.");
+            }
+
+
+            //get the event details
+            var eventData = await EventRepository.GetEventById(bookingData.EventId);
+            if (eventData == null)
+            {
+                return NotFound("Event Not Found");
             }
 
             //check if current date and event date has greater than 2 days difference
@@ -154,13 +165,13 @@ namespace Ebooking.Controllers
             }
 
             //delete the booking 
-            var bookingDeleted = BookingRepository.DeleteBooking(cancelBookingDTO.BookingID);
+            var bookingDeleted = BookingRepository.DeleteBooking(cancelBookingID);
             if (bookingDeleted == false)
             {
                 return StatusCode(500, "An error occurred while deleting the booking.");
             }
             //update the event available tickets
-            var eventObj = await EventRepository.IncreaseEventTicketCount(cancelBookingDTO.EventID, bookingData.NoOfTickets);
+            var eventObj = await EventRepository.IncreaseEventTicketCount(bookingData.EventId, bookingData.NoOfTickets);
             if (eventObj == null)
             {
                 return StatusCode(500, "An error occurred while updating the event tickets.");

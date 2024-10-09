@@ -6,11 +6,12 @@ import { SuccessMessageComponent } from './components/booking-success/success-me
 import { EventDescriptionComponent } from './components/event-description/event-description.component';
 import { EventComponent } from './components/event-card/event.component';
 import { AuthService } from './services/auth/auth-service.service';
+import { LoginComponent } from './components/auth/login/login.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, EventsListComponent, EventBookingComponent, SuccessMessageComponent, RouterModule, EventDescriptionComponent, EventComponent],
+  imports: [RouterOutlet, EventsListComponent, EventBookingComponent, SuccessMessageComponent, RouterModule, EventDescriptionComponent, EventComponent,LoginComponent,],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
