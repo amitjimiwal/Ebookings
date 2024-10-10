@@ -128,7 +128,6 @@ namespace api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             //get the user from the claims
             var username = User.GetUserName();
             var user = await _userManager.FindByNameAsync(username);
@@ -136,12 +135,19 @@ namespace api.Controllers
             {
                 return BadRequest("User not found");
             }
-            Console.WriteLine($"{updateUserDTO.Email} {updateUserDTO.PhoneNumber} {updateUserDTO.UserName}");
+
+            // Console.WriteLine($"{updateUserDTO.Email} {updateUserDTO.PhoneNumber} {updateUserDTO.UserName}");
+            bool IsTokenRefreshed = false;
             //update the user details
-            if (updateUserDTO.Email != null && updateUserDTO.Email != "") user.Email = updateUserDTO.Email;
+            if (updateUserDTO.Email != null && updateUserDTO.Email != "")
+            {
+                user.Email = updateUserDTO.Email;
+                IsTokenRefreshed = true;
+            }
             if (updateUserDTO.PhoneNumber != null && updateUserDTO.PhoneNumber != "") user.PhoneNumber = updateUserDTO.PhoneNumber;
             if (updateUserDTO.UserName != null && updateUserDTO.UserName != "")
             {
+                IsTokenRefreshed = true;
                 user.UserName = updateUserDTO.UserName;
             }
 
@@ -149,6 +155,7 @@ namespace api.Controllers
             //password updates
             if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
             {
+                IsTokenRefreshed = true;
                 var userUPDATED = await _userManager.ChangePasswordAsync(user, updateUserDTO.OldPassWord, updateUserDTO.NewPassWord);
                 if (!userUPDATED.Succeeded)
                 {
@@ -162,6 +169,7 @@ namespace api.Controllers
             return Ok(new
             {
                 message = "User Updated Successfully",
+                token = IsTokenRefreshed ? tokenService.CreateToken(user) : null,
                 user = user.CreateUserDTOfromUser()
             });
         }

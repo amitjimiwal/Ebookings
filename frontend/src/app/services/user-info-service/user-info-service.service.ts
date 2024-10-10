@@ -35,9 +35,9 @@ export class UserInfoService {
 
     //pipe is used here to intercept the response and do some operation on it
     return this.http.put('http://localhost:5077/api/Auth/update', user, { headers }).pipe(map((data: any) => {
-      this.removeUser();
-      this.tokenStorage.removeToken();
-      this.router.navigate(['/login']);
+      if (data.token) this.tokenStorage.setToken(data.token);
+      this.setUser(data.user);
+      alert('User Updated Successfully');
     }));
   }
 }

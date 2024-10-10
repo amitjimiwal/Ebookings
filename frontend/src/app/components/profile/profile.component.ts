@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AppUser } from '../../models/interface/user';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UserInfoService } from '../../services/user-info-service/user-info-service.service';
@@ -24,9 +24,9 @@ export class ProfileComponent implements OnInit {
     this.profileForm = this.fb.group({
       phoneNumber: [''],
       userName: [''],
-      email: [''],
-      oldPassword: [''],
-      newPassword: ['']
+      email: ['', Validators.email],
+      oldPassword: ['', [Validators.minLength(6), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')]],
+      newPassword: ['', [Validators.minLength(6), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')]],
     });
   }
 
@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   }
 
   loadUserProfile() {
-    this.user = this.userService.getUser()
+    this.user = this.userService.getUser();
   }
 
   toggleEdit() {
@@ -48,20 +48,22 @@ export class ProfileComponent implements OnInit {
   onSubmit() {
     if (this.profileForm.valid) {
       const updatedUser = {
-        ...this.user,
         ...this.profileForm.value
       }
+      console.log(updatedUser);
       this.userService.updateUser(updatedUser).subscribe(
         (response) => {
           this.user = this.userService.getUser();
           this.isEditing = false;
+          this.profileForm.reset();
           console.log('Profile updated successfully');
         },
         error => {
           console.error('Error occurred while updating user profile', error);
-          alert(error.error);
+          alert('Error occurred while updating user profile');
         }
       );
     }
   }
+
 }
