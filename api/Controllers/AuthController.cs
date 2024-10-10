@@ -138,11 +138,13 @@ namespace api.Controllers
 
             // Console.WriteLine($"{updateUserDTO.Email} {updateUserDTO.PhoneNumber} {updateUserDTO.UserName}");
             bool IsTokenRefreshed = false;
+            bool IsPasswordOrEmailUpdated = false;
             //update the user details
             if (updateUserDTO.Email != null && updateUserDTO.Email != "")
             {
                 user.Email = updateUserDTO.Email;
                 IsTokenRefreshed = true;
+                IsPasswordOrEmailUpdated = true;
             }
             if (updateUserDTO.PhoneNumber != null && updateUserDTO.PhoneNumber != "") user.PhoneNumber = updateUserDTO.PhoneNumber;
             if (updateUserDTO.UserName != null && updateUserDTO.UserName != "")
@@ -156,6 +158,7 @@ namespace api.Controllers
             if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
             {
                 IsTokenRefreshed = true;
+                IsPasswordOrEmailUpdated = true;
                 var userUPDATED = await _userManager.ChangePasswordAsync(user, updateUserDTO.OldPassWord, updateUserDTO.NewPassWord);
                 if (!userUPDATED.Succeeded)
                 {
@@ -170,6 +173,7 @@ namespace api.Controllers
             {
                 message = "User Updated Successfully",
                 token = IsTokenRefreshed ? tokenService.CreateToken(user) : null,
+                reAuthorize = IsPasswordOrEmailUpdated,
                 user = user.CreateUserDTOfromUser()
             });
         }

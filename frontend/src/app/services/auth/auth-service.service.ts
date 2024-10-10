@@ -44,7 +44,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorage.getToken()}`
     })
-    return this.httpClient.post('http://localhost:5077/api/Auth/register', UserPayload, { headers });
+    return this.httpClient.post('http://localhost:5077/api/Auth/register', UserPayload, { headers, responseType: 'text' });
   }
 
   //isAuthenticated

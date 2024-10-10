@@ -61,6 +61,7 @@ namespace Ebooking.Controllers
         {
             var eventData = await eventRepository.GetEventById(guid);
             if (eventData == null) return NotFound();
+            Console.WriteLine("Done with the event data");
             return Ok(eventData.CreateDTOFromEvent());
         }
 

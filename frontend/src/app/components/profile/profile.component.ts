@@ -25,8 +25,8 @@ export class ProfileComponent implements OnInit {
       phoneNumber: [''],
       userName: [''],
       email: ['', Validators.email],
-      oldPassword: ['', [Validators.minLength(6), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')]],
-      newPassword: ['', [Validators.minLength(6), Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$')]],
+      oldPassword: ['', [Validators.minLength(6)]],
+      newPassword: ['', [Validators.minLength(6)]],
     });
   }
 
