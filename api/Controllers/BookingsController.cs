@@ -57,7 +57,7 @@ namespace Ebooking.Controllers
                 return BadRequest("Tickets Exceeds Maximum Allowed");
             }
             //get booking count for the event by the person if already done
-            int BookingCount = await BookingRepository.GetBookingsCount(bookTicketDTO.EventId, bookTicketDTO.Email);
+            int BookingCount = await BookingRepository.GetBookingsCount(bookTicketDTO.EventId, appUser.Id);
             if (BookingCount >= eventData.MaxTicketsPerPerson)
             {
                 return BadRequest("You Can't Book more tickets for this event.");

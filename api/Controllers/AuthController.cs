@@ -153,10 +153,16 @@ namespace api.Controllers
                 user.UserName = updateUserDTO.UserName;
             }
 
+            // if both old and new password are not provided check
+
 
             //password updates
             if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
             {
+                if ((updateUserDTO.OldPassWord != null || updateUserDTO.OldPassWord != "") && (updateUserDTO.NewPassWord == null || updateUserDTO.NewPassWord == ""))
+                {
+                    return BadRequest("Please provide both old and new password");
+                }
                 IsTokenRefreshed = true;
                 IsPasswordOrEmailUpdated = true;
                 var userUPDATED = await _userManager.ChangePasswordAsync(user, updateUserDTO.OldPassWord, updateUserDTO.NewPassWord);

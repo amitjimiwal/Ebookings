@@ -52,13 +52,13 @@ namespace Ebooking.Repository
             return BookingData;
         }
 
-        public async Task<int> GetBookingsCount(Guid eventId, string email)
+        public async Task<int> GetBookingsCount(Guid eventId, string ID)
         {
             //storing the data as queryable
             var BookingsForEventByUser = Db.Bookings.AsQueryable();
 
             //filter out the bookings of user
-            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.EventId == eventId);
+            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppUserID == ID && booking.EventId == eventId);
 
             return await BookingsForEventByUser.CountAsync();
         }

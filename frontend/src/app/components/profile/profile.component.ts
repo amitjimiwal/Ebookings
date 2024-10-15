@@ -47,6 +47,13 @@ export class ProfileComponent implements OnInit {
 
   onSubmit() {
     if (this.profileForm.valid) {
+      if (this.profileForm.value.oldPassword && !this.profileForm.value.newPassword) {
+        alert('Please enter both password');
+        return;
+      } else if (!this.profileForm.value.oldPassword && this.profileForm.value.newPassword) {
+        alert('Please enter both password');
+        return;
+      }
       const updatedUser = {
         ...this.profileForm.value
       }
