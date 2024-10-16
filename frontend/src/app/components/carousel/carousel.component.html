@@ -1,0 +1,40 @@
+<div class="relative w-full max-w-3xl mx-auto">
+  <div class="overflow-hidden">
+    <div
+      class="flex transition-transform duration-300 ease-in-out"
+      [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+    >
+      <img
+        *ngFor="let image of images"
+        [src]="image"
+        class="w-full h-64 object-cover flex-shrink-0"
+        alt="Carousel image"
+      />
+    </div>
+  </div>
+  <button
+    (click)="prev()"
+    class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-r"
+  >
+    &lt;
+  </button>
+  <button
+    (click)="next()"
+    class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-800 p-2 rounded-l"
+  >
+    &gt;
+  </button>
+  <div
+    class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2"
+  >
+    <button
+      *ngFor="let image of images; let i = index"
+      (click)="goTo(i)"
+      class="w-3 h-3 rounded-full"
+      [ngClass]="{
+        'bg-white': i === currentIndex,
+        'bg-gray-400': i !== currentIndex
+      }"
+    ></button>
+  </div>
+</div>

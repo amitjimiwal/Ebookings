@@ -9,13 +9,9 @@
   </div>
   }
   <div class="flex items-center justify-center p-4">
-    <div
-      class="bg-white p-8 max-w-md w-full space-y-8 "
-    >
+    <div class="bg-white p-8 max-w-md w-full space-y-8">
       @if (isEditing) {
-      <h2 class="text-2xl font-bold text-center">
-        Edit Profile
-      </h2>
+      <h2 class="text-2xl font-bold text-center">Edit Profile</h2>
       <p>Only fill the data that you want to update</p>
       <p>
         <b>Note:</b> old and new password both required when you want to update
@@ -70,7 +66,7 @@
           <input
             id="oldPassword"
             formControlName="oldPassword"
-            type="tel"
+            type="password"
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>
@@ -83,7 +79,7 @@
           <input
             id="newPassword"
             formControlName="newPassword"
-            type="tel"
+            type="password"
             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
         </div>

@@ -142,6 +142,12 @@ namespace api.Controllers
             //update the user details
             if (updateUserDTO.Email != null && updateUserDTO.Email != "")
             {
+                //check if user already exists with this email
+                var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.Email == updateUserDTO.Email);
+                if (userExisted != null)
+                {
+                    return BadRequest("User with this email already exists");
+                }
                 user.Email = updateUserDTO.Email;
                 IsTokenRefreshed = true;
                 IsPasswordOrEmailUpdated = true;
@@ -150,6 +156,12 @@ namespace api.Controllers
             if (updateUserDTO.UserName != null && updateUserDTO.UserName != "")
             {
                 IsTokenRefreshed = true;
+                //check if userNAmes already exists
+                var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.UserName == updateUserDTO.UserName);
+                if (userExisted != null)
+                {
+                    return BadRequest("User with this username already exists");
+                }
                 user.UserName = updateUserDTO.UserName;
             }
 
