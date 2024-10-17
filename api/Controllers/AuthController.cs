@@ -51,7 +51,9 @@ namespace api.Controllers
             {
                 UserName = registerUserDTO.UserName,
                 Email = registerUserDTO.Email,
-                PhoneNumber = registerUserDTO.PhoneNumber
+                PhoneNumber = registerUserDTO.PhoneNumber,
+                PreferredCurrency = registerUserDTO.PreferredCurrency,
+                PreferredLanguage = registerUserDTO.PreferredLanguage
             };
 
             //create a user to the application
@@ -63,7 +65,6 @@ namespace api.Controllers
             {
                 return StatusCode(500, CreatedUser.Errors);
             }
-
             return Ok("User Created Successfully, Please Login");
         }
 
@@ -146,7 +147,7 @@ namespace api.Controllers
                 var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.Email == updateUserDTO.Email);
                 if (userExisted != null)
                 {
-                    return BadRequest("User with this email already exists");
+                    return BadRequest($"{updateUserDTO.UserName}is already taken");
                 }
                 user.Email = updateUserDTO.Email;
                 IsTokenRefreshed = true;
@@ -160,21 +161,19 @@ namespace api.Controllers
                 var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.UserName == updateUserDTO.UserName);
                 if (userExisted != null)
                 {
-                    return BadRequest("User with this username already exists");
+                    return BadRequest($"{updateUserDTO.Email} is already taken. Please login");
                 }
                 user.UserName = updateUserDTO.UserName;
             }
 
+            if (updateUserDTO.PreferredCurrency != null && updateUserDTO.PreferredCurrency != "") user.PreferredCurrency = updateUserDTO.PreferredCurrency;
+            if (updateUserDTO.PreferredLanguage != null && updateUserDTO.PreferredLanguage != "") user.PreferredLanguage = updateUserDTO.PreferredLanguage;
             // if both old and new password are not provided check
 
 
             //password updates
             if (updateUserDTO.OldPassWord != null && updateUserDTO.OldPassWord != "" && updateUserDTO.NewPassWord != null && updateUserDTO.NewPassWord != "")
             {
-                if ((updateUserDTO.OldPassWord != null || updateUserDTO.OldPassWord != "") && (updateUserDTO.NewPassWord == null || updateUserDTO.NewPassWord == ""))
-                {
-                    return BadRequest("Please provide both old and new password");
-                }
                 IsTokenRefreshed = true;
                 IsPasswordOrEmailUpdated = true;
                 var userUPDATED = await _userManager.ChangePasswordAsync(user, updateUserDTO.OldPassWord, updateUserDTO.NewPassWord);

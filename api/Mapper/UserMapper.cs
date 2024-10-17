@@ -18,7 +18,9 @@ namespace api.Mapper
                 Id = applicationUser.Id,
                 UserName = applicationUser.UserName,
                 NormalizedUserName = applicationUser.NormalizedUserName,
-                Email = applicationUser.Email
+                Email = applicationUser.Email,
+                PreferredLanguage = applicationUser.PreferredLanguage,
+                PreferredCurrency = applicationUser.PreferredCurrency
             };
         }
     }

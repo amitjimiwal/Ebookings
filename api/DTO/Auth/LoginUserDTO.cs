@@ -8,7 +8,6 @@ namespace api.DTO.Auth
 {
     public class LoginUserDTO
     {
-        [EmailAddress]
         [Required(ErrorMessage = "UserName or Email is required")]
         public string UserNameOrEmail { get; set; }
 

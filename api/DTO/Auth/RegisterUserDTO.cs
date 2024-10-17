@@ -20,5 +20,7 @@ namespace api.DTO.Auth
 
         [MaxLength(10)]
         public string? PhoneNumber { get; set; }
+        public string PreferredLanguage { get; set; } = "EN";
+        public string PreferredCurrency { get; set; } = "INR";
     }
 }

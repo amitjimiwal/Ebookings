@@ -56,8 +56,8 @@ namespace api.Mapper
                 BookedAt = bookings.BookedAt,
                 AppUserID = bookings.AppUserID,
                 EventName = bookings.Event.EventName,
-                EventLocation = bookings.Event.Venue,
-                BannerImg = bookings.Event.BannerImg,
+                EventLocation = bookings.Event.Venue.Address,
+                BannerImages = bookings.Event.EventImages.Select(image => image.ImageUrl).ToList(),
                 Description = bookings.Event.Description,
                 EventDate = bookings.Event.Date
             };

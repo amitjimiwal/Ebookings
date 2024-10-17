@@ -39,13 +39,13 @@ namespace Ebooking.Repository
 
         public async Task<List<Events>> GetAllEvents()
         {
-            var allEvents = await Db.Events.Include(cat => cat.Category).ToListAsync();
+            var allEvents = await Db.Events.Include(eve => eve.Category).Include(eve => eve.EventImages).Include(eve => eve.TicketTypes).ToListAsync();
             return allEvents;
         }
 
         public async Task<Events?> GetEventById(Guid id)
         {
-            var EventData = await Db.Events.Include(e => e.Category).FirstOrDefaultAsync(eve => eve.Id == id);
+            var EventData = await Db.Events.Include(e => e.Category).Include(eve => eve.EventImages).Include(eve => eve.TicketTypes).FirstOrDefaultAsync(eve => eve.Id == id);
             if (EventData == null)
             {
                 return null;
@@ -62,7 +62,7 @@ namespace Ebooking.Repository
             }
             if (EventData.AvailableTickets < tickets) return null;
             //reduce tickets and update the data
-            EventData.AvailableTickets -= tickets;
+            // EventData.AvailableTickets -= tickets;
             Db.Entry(EventData).Property(r => r.AvailableTickets).IsModified = true;
 
             await Db.SaveChangesAsync();
@@ -77,7 +77,7 @@ namespace Ebooking.Repository
             }
             if (EventData.AvailableTickets < tickets) return null;
             //reduce tickets and update the data
-            EventData.AvailableTickets += tickets;
+            // EventData.AvailableTickets += tickets;
             Db.Entry(EventData).Property(r => r.AvailableTickets).IsModified = true;
             await Db.SaveChangesAsync();
             return EventData;

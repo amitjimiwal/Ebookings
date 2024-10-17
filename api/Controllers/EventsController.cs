@@ -68,7 +68,7 @@ namespace Ebooking.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO createEventDTO)
+        public async Task<IActionResult> CreateEvent([FromForm] CreateEventDTO createEventDTO)
         {
             if (!ModelState.IsValid)
             {

@@ -6,7 +6,6 @@ using api.Models;
 using Ebooking.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
 namespace Ebooking.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -19,21 +18,28 @@ namespace Ebooking.Data
         public DbSet<Events> Events { get; set; }
         public DbSet<EventCategory> EventCategories { get; set; }
         public DbSet<Bookings> Bookings { get; set; }
-
+        public DbSet<TicketTypes> TicketTypes { get; set; }
+        public DbSet<EventImage> EventImages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
             builder.Entity<ApplicationUser>(entity =>
             {
                 entity.ToTable("Users");
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id"); ;
                 entity.Property(e => e.UserName).HasColumnName("username").IsRequired();
                 entity.Property(e => e.Email).HasColumnName("email").IsRequired();
                 entity.Property(e => e.PhoneNumber).HasColumnName("phone_number").IsRequired();
                 entity.Property(e => e.PasswordHash).HasColumnName("password").IsRequired();
                 entity.Property(e => e.CreatedAt).HasColumnName("createdAt").HasDefaultValueSql("CURRENT_TIMESTAMP");
+                //email and username should be unique
+                entity.HasIndex(e => e.UserName).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
             });
+            
+            // Embed Venue as a value object in the Event
+            builder.Entity<Events>()
+                .OwnsOne(e => e.Venue);
         }
     }
 }

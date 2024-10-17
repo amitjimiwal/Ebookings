@@ -12,6 +12,6 @@ namespace api.DTO.Bookings
         public DateTime? EventDate { get; set; }
         public string? Description { get; set; } = string.Empty;
 
-        public string? BannerImg { get; set; } = string.Empty;
+        public List<string> BannerImages { get; set; } = new List<string>();
     }
 }

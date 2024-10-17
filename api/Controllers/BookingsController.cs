@@ -52,13 +52,13 @@ namespace Ebooking.Controllers
                 return NotFound("Event Not Found");
             }
             //check if tickets greater than max allowed
-            if (bookTicketDTO.NoOfTickets > eventData.MaxTicketsPerPerson)
+            if (bookTicketDTO.NoOfTickets > eventData.MaxTicketsPerAccount)
             {
                 return BadRequest("Tickets Exceeds Maximum Allowed");
             }
             //get booking count for the event by the person if already done
             int BookingCount = await BookingRepository.GetBookingsCount(bookTicketDTO.EventId, appUser.Id);
-            if (BookingCount >= eventData.MaxTicketsPerPerson)
+            if (BookingCount >= eventData.MaxTicketsPerAccount)
             {
                 return BadRequest("You Can't Book more tickets for this event.");
             }

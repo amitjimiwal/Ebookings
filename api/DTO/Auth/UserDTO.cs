@@ -13,5 +13,7 @@ namespace api.DTO.Auth
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
         public string Email { get; set; }
+        public string PreferredLanguage { get; set; } = "EN";
+        public string PreferredCurrency { get; set; } = "INR";
     }
 }
