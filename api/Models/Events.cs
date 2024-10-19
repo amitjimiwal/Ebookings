@@ -38,7 +38,7 @@ namespace Ebooking.Models
         {
             get
             {
-                return TicketTypes.Sum(ticket => ticket.AvailableTickets);
+                return TicketTypes.Sum(ticket => ticket.AvailableTickets) ;
             }
         }
 

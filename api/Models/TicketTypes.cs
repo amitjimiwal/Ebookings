@@ -9,11 +9,12 @@ namespace api.Models
 {
     public class TicketTypes
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         // Foreign key relationship with the Events table
-        public int TicketEventID { get; set; }
         public Events Event { get; set; }  // Navigation property for the related Event
+
+        public Guid EventId { get; set; }
 
         [Column(TypeName = "decimal(10, 2)")]
         public decimal TicketPrice { get; set; }

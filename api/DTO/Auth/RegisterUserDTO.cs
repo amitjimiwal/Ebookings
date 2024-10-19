@@ -20,7 +20,11 @@ namespace api.DTO.Auth
 
         [MaxLength(10)]
         public string? PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Preferred Language is required")]
         public string PreferredLanguage { get; set; } = "EN";
+
+        [Required(ErrorMessage = "Preferred Currency is required")]
         public string PreferredCurrency { get; set; } = "INR";
     }
 }

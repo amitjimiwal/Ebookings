@@ -34,7 +34,7 @@ namespace Ebooking.DTO.Events
         public decimal MinPriceTicket { get; set; }
         public int AvailableTickets { get; set; }
         public int? MaxTicketsPerPerson { get; set; }
-        public string[] Images { get; set; }
+        public string[]? Images { get; set; }
         public List<TicketDTO>? TicketTypes { get; set; }
         public string Category { get; set; } = string.Empty;
     }

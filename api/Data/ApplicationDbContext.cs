@@ -40,6 +40,16 @@ namespace Ebooking.Data
             // Embed Venue as a value object in the Event
             builder.Entity<Events>()
                 .OwnsOne(e => e.Venue);
+
+             builder.Entity<Events>()
+                .HasMany(e => e.TicketTypes)
+                .WithOne(t => t.Event); // Use the correct navigation property in TicketType  // Set explicit foreign key property
+
+            // Configure relationships between Event and EventImage
+            builder.Entity<Events>()
+                .HasMany(e => e.EventImages)
+                .WithOne(i => i.Event)  // Use the correct navigation property in EventImage
+                .HasForeignKey(i => i.EventID);  // Set explicit foreign key property
         }
     }
 }

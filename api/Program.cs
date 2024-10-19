@@ -1,6 +1,8 @@
 using api.Handlers;
 using api.Interface;
 using api.Models;
+using api.Repository;
+using api.Services;
 using Ebooking.Data;
 using Ebooking.Interface;
 using Ebooking.Repository;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using stockapi.Service;
@@ -24,19 +27,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-// //add identity of application user as Dependency Injection
-// builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-// {
-//     options.Password.RequireDigit = true;
-//     options.Password.RequireNonAlphanumeric = true;
-//     options.Password.RequireLowercase = true;
-//     options.Password.RequireUppercase = true;
-//     options.Password.RequiredLength = 8;
-// }).AddEntityFrameworkStores<ApplicationDbContext>();
-
 builder.Services.AddScoped<IEventRepository, EventsRepository>();
 builder.Services.AddScoped<IBookingRepository, BookingsRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
+builder.Services.AddScoped<IEventImageRepository, EventImageRepository>();
+builder.Services.AddScoped<IEventTicketRepository, EventTicketRepository>();
 
 //add identity of application user as Dependency Injection
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -140,7 +136,11 @@ app.UseExceptionHandler(new ExceptionHandlerOptions()
     AllowStatusCode404Response = true,
     ExceptionHandlingPath = "/error"
 });
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+    RequestPath = "/uploads",
+});
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

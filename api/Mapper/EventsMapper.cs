@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.DTO.Events;
+using api.Interface;
 using api.Models;
 using Ebooking.DTO.Events;
 using Ebooking.Models;
@@ -33,7 +34,7 @@ namespace api.Mapper
                 TicketTypes = events.TicketTypes.Select(ticket => new TicketDTO()
                 {
                     Id = ticket.Id,
-                    EventID = ticket.TicketEventID,
+                    EventID = ticket.EventId,
                     TicketPrice = ticket.TicketPrice,
                     TotalTickets = ticket.TotalTickets,
                     AvailableTickets = ticket.AvailableTickets,
@@ -48,21 +49,12 @@ namespace api.Mapper
                 EventName = createEventDTO.EventName,
                 Date = createEventDTO.Date,
                 EventTiming = createEventDTO.EventTiming,
-                TotalTickets = createEventDTO.TotalTickets,
+                TotalTickets = createEventDTO.Venue.Capacity,
                 TimeZone = createEventDTO.TimeZone,
                 Description = createEventDTO.Description,
                 Venue = createEventDTO.Venue,
-                EventImages = createEventDTO.Images.Select(image => new EventImage() { ImageUrl = image.FileName }).ToList(),
-                TicketTypes = createEventDTO.TicketTypes.Select(ticket => new TicketTypes()
-                {
-                    TicketPrice = ticket.TicketPrice,
-                    TotalTickets = ticket.TotalTickets,
-                    AvailableTickets = ticket.TotalTickets,
-                    DisplayName = ticket.DisplayName
-                }).ToList(),
                 MaxTicketsPerAccount = createEventDTO.MaxTicketsPerAccount,
                 CategoryId = createEventDTO.CategoryId,
-                // Assigning the user id to the event
                 ApplicationUserID = userID
             };
         }

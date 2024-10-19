@@ -7,8 +7,8 @@ namespace api.DTO.Events
 {
     public class TicketDTO
     {
-        public int Id { get; set; }
-        public int EventID { get; set; }
+        public Guid Id { get; set; }
+        public Guid EventID { get; set; }
         public decimal TicketPrice { get; set; }
 
         public int TotalTickets { get; set; }

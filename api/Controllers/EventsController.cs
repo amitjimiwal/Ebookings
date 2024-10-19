@@ -1,16 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using System.Text.Json;
 using api.DTO.Events;
+using api.Interface;
 using api.Mapper;
 using api.Models;
-using Ebooking.DTO.Events;
 using Ebooking.Interface;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using stockapi.Extensions;
@@ -24,8 +18,13 @@ namespace Ebooking.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IEventRepository eventRepository;
         private readonly IBookingRepository BookingRepository;
-        public EventsController(IEventRepository repository, IBookingRepository booking, UserManager<ApplicationUser> userManager)
+        private readonly IImageUploadService imageUploadService;
+
+        private readonly IEventTicketRepository eventTicketRepository;
+        public EventsController(IEventRepository repository, IBookingRepository booking, UserManager<ApplicationUser> userManager, IImageUploadService imageUploadService, IEventTicketRepository eventTicket)
         {
+            eventTicketRepository = eventTicket;
+            this.imageUploadService = imageUploadService;
             eventRepository = repository;
             BookingRepository = booking;
             this.userManager = userManager;
@@ -68,11 +67,16 @@ namespace Ebooking.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateEvent([FromForm] CreateEventDTO createEventDTO)
+        public async Task<IActionResult> CreateEvent([FromBody] CreateEventDTO createEventDTO)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if (!TotalTicketsValidation(createEventDTO.Venue.Capacity, createEventDTO.TicketTypes))
+            {
+                return BadRequest("Total tickets should be less than or equal to venue capacity");
             }
             //get the username from claims
             string UserName = User.GetUserName();
@@ -81,15 +85,57 @@ namespace Ebooking.Controllers
             {
                 return BadRequest("User not found");
             }
-
             //create new event
             var newEvent = createEventDTO.CreateEventFromDTO(appUser.Id);
+            var ticketTypes = await eventTicketRepository.CreateTicketForEvent(createEventDTO.TicketTypes, newEvent.Id);
+            newEvent.TicketTypes = ticketTypes;
             var CreatedEvent = await eventRepository.CreateEvent(newEvent);
             if (CreatedEvent == null)
             {
                 return StatusCode(500, "Error while creating the event");
             }
-            return CreatedAtAction(nameof(GetEvent), new { guid = CreatedEvent.Id }, CreatedEvent.CreateDTOFromEvent());
+            return Ok("Successfully created the event");
+        }
+
+        private bool TotalTicketsValidation(int venueCapacity, List<CreateTicketDTO> ticketTypes)
+        {
+            int totalTickets = 0;
+            foreach (var ticket in ticketTypes)
+            {
+                totalTickets += ticket.TotalTickets;
+            }
+            return totalTickets <= venueCapacity;
+        }
+
+        [HttpPost("uploadImage/{eventId}")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage([FromForm] List<IFormFile> image, Guid eventId)
+        {
+
+            //get the username from claims
+            string UserName = User.GetUserName();
+            var appUser = await userManager.FindByNameAsync(UserName);
+            if (appUser == null)
+            {
+                return BadRequest("User not found");
+            }
+
+            //find the event
+            var eventData = await eventRepository.GetEventById(eventId);
+            if (eventData == null)
+            {
+                return NotFound("Event not found");
+            }
+
+            //validate if the correct user is trying to upload the image
+            if (eventData.ApplicationUserID != appUser.Id)
+            {
+                return Unauthorized("You are not authorized to upload images for this event");
+            }
+
+            //upload the image
+            await imageUploadService.UploadImageAsync(image, eventId);
+            return Ok("Successfully uploaded all the images");
         }
     }
 }

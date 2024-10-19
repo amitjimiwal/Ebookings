@@ -386,11 +386,9 @@ namespace Ebooking.Migrations
 
             modelBuilder.Entity("api.Models.TicketTypes", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("AvailableTickets")
                         .HasColumnType("int");
@@ -401,9 +399,6 @@ namespace Ebooking.Migrations
 
                     b.Property<Guid>("EventId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TicketEventID")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("TicketPrice")
                         .HasColumnType("decimal(10, 2)");
