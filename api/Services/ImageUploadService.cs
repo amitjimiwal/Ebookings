@@ -14,7 +14,7 @@ namespace api.Services
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png" };
+        private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png",".webp" };
         private readonly long _ImageMAxSize = 5 * 1024 * 1024;
 
 

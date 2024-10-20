@@ -5,6 +5,14 @@
     <h1 class="text-lg font-semibold">Filter by Category:</h1>
     <button
       class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
+      (click)="filterEvents('')"
+      [class.bg-blue-700]="selectedCategory == ''"
+      [class.text-white]="selectedCategory == ''"
+    >
+      All
+    </button>
+    <button
+      class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
       *ngFor="let category of categories"
       (click)="filterEvents(category.name)"
       [class.bg-blue-700]="selectedCategory == category.name"

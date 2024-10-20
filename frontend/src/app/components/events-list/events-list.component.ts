@@ -21,7 +21,8 @@ export class EventsListComponent implements OnInit {
   calenderIcon = faCalendarAlt;
   public events: EventData[] = [];
   private eventService = inject(EventService);
-  categories: Category[] = [];
+  categories: Category[] = [
+  ];
   sortType: string = '';
   selectedCategory: string = '';
   sortOrder: boolean = false;
@@ -49,7 +50,7 @@ export class EventsListComponent implements OnInit {
     this.updateEvents();
   }
   updateEvents(): void {
-    this.eventService.getEvents(this.selectedCategory, this.sortType,this.sortOrder).subscribe(events => this.events = events, (error) => {
+    this.eventService.getEvents(this.selectedCategory, this.sortType, this.sortOrder).subscribe(events => this.events = events, (error) => {
       console.error("Error occurred while getting the data of events", error);
     }, () => {
       console.log("Events data fetched successfully");
