@@ -42,7 +42,7 @@ namespace Ebooking.Repository
         public async Task<List<Events>> GetAllEvents(QueryParamsDTO query)
         {
             var allEvents = Db.Events.Include(eve => eve.Category).Include(eve => eve.EventImages).Include(eve => eve.TicketTypes).AsQueryable();
-
+            
             //filter by category
             if (!string.IsNullOrWhiteSpace(query.Category))
             {

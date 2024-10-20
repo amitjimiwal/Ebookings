@@ -10,7 +10,7 @@
     {{ event?.venueAddress }}
   </p>
   <p class="text-black font-bold">
-   <span class="text-red-500"> ₹{{ event?.minPriceTicket }}</span> onwards
+    <span class="text-red-500"> ₹{{ event?.minPriceTicket }}</span> onwards
   </p>
   <p class="text-lg mt-2">
     @if (event?.availableTickets==0) {
@@ -21,7 +21,7 @@
     {{ event?.category }}
   </p>
   <a
-    [routerLink]="['/booking', event?.id]"
+    [routerLink]="['/events/buy-page', event?.id]"
     class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
     >Book Now</a
   >

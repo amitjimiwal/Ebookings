@@ -15,5 +15,6 @@ namespace api.DTO.Auth
         public string Email { get; set; }
         public string PreferredLanguage { get; set; } = "EN";
         public string PreferredCurrency { get; set; } = "INR";
+        public string ProfilePictureUrl { get; set; }
     }
 }

@@ -6,6 +6,9 @@ export interface AppUser {
      normalizedUserName: string;
      email: string;
      normalizedEmail: string;
+     profilePictureUrl: string;
+     preferredLanguage: string;
+     preferredCurrency: string;
      // emailConfirmed: boolean;
      // passwordHash: string;
      // securityStamp: string;

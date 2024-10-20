@@ -41,10 +41,19 @@ export class AuthService {
 
   //signup
   signUp(UserPayload: RegisterDto): Observable<any> {
+    const formPayload = new FormData();
+    formPayload.append('userName', UserPayload.userName);
+    formPayload.append('email', UserPayload.email);
+    formPayload.append('password', UserPayload.password);
+    formPayload.append('phoneNumber', UserPayload.phoneNumber || '');
+    formPayload.append('PreferredLanguage', UserPayload.PreferredLanguage);
+    formPayload.append('PreferredCurrency', UserPayload.PreferredCurrency);
+    if (UserPayload.ProfilePicture)
+      formPayload.append('ProfilePicture', UserPayload.ProfilePicture);
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorage.getToken()}`
     })
-    return this.httpClient.post('http://localhost:5077/api/Auth/register', UserPayload, { headers, responseType: 'text' });
+    return this.httpClient.post('http://localhost:5077/api/Auth/register', formPayload, { headers, responseType: 'text', });
   }
 
   //isAuthenticated

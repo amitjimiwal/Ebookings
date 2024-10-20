@@ -25,14 +25,17 @@ namespace api.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ITokenService tokenService;
-        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService)
+
+        private readonly IImageUploadService imageUploadService;
+        public AuthController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService, IImageUploadService imageUpload)
         {
+            this.imageUploadService = imageUpload;
             _userManager = userManager;
             _signInManager = signInManager;
             this.tokenService = tokenService;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserDTO registerUserDTO)
+        public async Task<IActionResult> RegisterUser([FromForm] RegisterUserDTO registerUserDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -46,20 +49,18 @@ namespace api.Controllers
             }
 
             //if above false , create a new user and add it to database
-
+            var imageUrls = await imageUploadService.UploadProfileImageAsync(registerUserDTO.ProfilePicture);
             var newUser = new ApplicationUser
             {
                 UserName = registerUserDTO.UserName,
                 Email = registerUserDTO.Email,
                 PhoneNumber = registerUserDTO.PhoneNumber,
                 PreferredCurrency = registerUserDTO.PreferredCurrency,
-                PreferredLanguage = registerUserDTO.PreferredLanguage
+                PreferredLanguage = registerUserDTO.PreferredLanguage,
+                ProfilePictureUrl = imageUrls
             };
-
             //create a user to the application
             var CreatedUser = await _userManager.CreateAsync(newUser, registerUserDTO.Password);
-
-
             //give success response [ frontend : navigate the user to the login page]
             if (!CreatedUser.Succeeded)
             {
@@ -75,7 +76,6 @@ namespace api.Controllers
             {
                 return BadRequest(ModelState);
             }
-
             //check if user with that email or username exists
             var user = await _userManager.FindByEmailAsync(loginUserDto.UserNameOrEmail);
             if (user == null)
@@ -147,7 +147,7 @@ namespace api.Controllers
                 var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.Email == updateUserDTO.Email);
                 if (userExisted != null)
                 {
-                    return BadRequest($"{updateUserDTO.UserName}is already taken");
+                    return BadRequest($"{updateUserDTO.Email} is already taken");
                 }
                 user.Email = updateUserDTO.Email;
                 IsTokenRefreshed = true;
@@ -161,7 +161,7 @@ namespace api.Controllers
                 var userExisted = await _userManager.Users.FirstOrDefaultAsync(user => user.UserName == updateUserDTO.UserName);
                 if (userExisted != null)
                 {
-                    return BadRequest($"{updateUserDTO.Email} is already taken. Please login");
+                    return BadRequest($"{updateUserDTO.UserName} is already taken");
                 }
                 user.UserName = updateUserDTO.UserName;
             }

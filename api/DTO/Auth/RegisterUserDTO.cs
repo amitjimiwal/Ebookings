@@ -26,5 +26,8 @@ namespace api.DTO.Auth
 
         [Required(ErrorMessage = "Preferred Currency is required")]
         public string PreferredCurrency { get; set; } = "INR";
+
+        [Required(ErrorMessage = "Profile Picture is required")]
+        public IFormFile ProfilePicture { get; set; }
     }
 }

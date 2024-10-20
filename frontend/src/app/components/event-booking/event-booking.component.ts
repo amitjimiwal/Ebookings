@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule, RouterState } from '@angular/router';
 import { EventService } from '../../services/event/event.service';
 import { CommonModule } from '@angular/common';
-import { EventDescriptionComponent } from '../event-description/event-description.component';
+import { EventDescriptionComponent } from '../event-description-box/event-description.component';
 import { BookingService } from '../../services/booking/booking.service';
 
 @Component({

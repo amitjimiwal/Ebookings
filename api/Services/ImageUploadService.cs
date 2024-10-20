@@ -14,7 +14,7 @@ namespace api.Services
     {
         private readonly IWebHostEnvironment webHostEnvironment;
         private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png",".webp" };
+        private readonly string[] _allowedExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
         private readonly long _ImageMAxSize = 5 * 1024 * 1024;
 
 
@@ -26,9 +26,14 @@ namespace api.Services
             eventImageRepository = eventImage;
             //create a dir to store images
             var uploadsDir = Path.Combine(webHostEnvironment.ContentRootPath, "uploads", "events");
+            var profileDir = Path.Combine(webHostEnvironment.ContentRootPath, "uploads", "profile");
             if (!Directory.Exists(uploadsDir))
             {
                 Directory.CreateDirectory(uploadsDir);
+            }
+            if (!Directory.Exists(profileDir))
+            {
+                Directory.CreateDirectory(profileDir);
             }
         }
 
@@ -42,7 +47,7 @@ namespace api.Services
             var uploadedUrls = new List<string>();
             foreach (IFormFile file in image)
             {
-                await ValidateFile(file);
+                ValidateFile(file);
                 //id /extension
                 var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName).ToLowerInvariant()}";
                 var relativePath = Path.Combine("uploads", "events", fileName);
@@ -61,12 +66,26 @@ namespace api.Services
             return uploadedUrls;
         }
 
-        public Task<List<string>> UploadImageAsync(List<IFormFile> image)
+        public async Task<string> UploadProfileImageAsync(IFormFile image)
         {
-            throw new NotImplementedException();
+            ValidateFile(image);
+            //id /extension
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName).ToLowerInvariant()}";
+            var relativePath = Path.Combine("uploads", "profile", fileName);
+            var absolutePath = Path.Combine(webHostEnvironment.ContentRootPath, relativePath);
+            // Save file
+            using (var fileStream = new FileStream(absolutePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+            string imageUrl = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/{relativePath.Replace("\\", "/")}";
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+            return imageUrl;
         }
 
-        public async Task ValidateFile(IFormFile file)
+        public void ValidateFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {

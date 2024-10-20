@@ -20,7 +20,8 @@ namespace api.Mapper
                 NormalizedUserName = applicationUser.NormalizedUserName,
                 Email = applicationUser.Email,
                 PreferredLanguage = applicationUser.PreferredLanguage,
-                PreferredCurrency = applicationUser.PreferredCurrency
+                PreferredCurrency = applicationUser.PreferredCurrency,
+                ProfilePictureUrl = applicationUser.ProfilePictureUrl
             };
         }
     }

@@ -50,7 +50,8 @@ export class ProfileComponent implements OnInit {
       if (this.profileForm.value.oldPassword && !this.profileForm.value.newPassword) {
         alert('Please enter both password');
         return;
-      } else if (!this.profileForm.value.oldPassword && this.profileForm.value.newPassword) {
+      }
+      if (!this.profileForm.value.oldPassword && this.profileForm.value.newPassword) {
         alert('Please enter both password');
         return;
       }
@@ -67,7 +68,7 @@ export class ProfileComponent implements OnInit {
         },
         error => {
           console.error('Error occurred while updating user profile', error);
-          alert('Error occurred while updating user profile');
+          alert(error.error);
         }
       );
     }

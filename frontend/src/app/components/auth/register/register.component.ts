@@ -14,12 +14,16 @@ import { Router, RouterModule } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  profileImage: File | null = null;
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private router: Router) {
     this.registerForm = formBuilder.group({
       userName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      phoneNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.maxLength(10)]]
+      phoneNumber: ['', [Validators.pattern('^[0-9]*$'), Validators.maxLength(10), Validators.minLength(10), Validators.required]],
+      ProfilePicture: ['', [Validators.required]],
+      PreferredLanguage: [''],
+      PreferredCurrency: ['']
     });
   }
 
@@ -36,7 +40,10 @@ export class RegisterComponent implements OnInit {
         userName: this.registerForm.get('userName')?.value,
         email: this.registerForm.get('email')?.value,
         password: this.registerForm.get('password')?.value,
-        phoneNumber: this.registerForm.get('phoneNumber')?.value
+        phoneNumber: this.registerForm.get('phoneNumber')?.value || undefined,
+        ProfilePicture: this.profileImage,
+        PreferredLanguage: this.registerForm.get('PreferredLanguage')?.value || 'INR',
+        PreferredCurrency: this.registerForm.get('PreferredCurrency')?.value || 'English'
       };
       this.authService.signUp(registerDto).subscribe((data) => {
         alert("Registration Successful , Please Login");
@@ -47,6 +54,12 @@ export class RegisterComponent implements OnInit {
       });
     } else {
       alert('Please fill all the fields correctly');
+    }
+  }
+
+  onFileChange(event: any): void {
+    if (event.target.files.length > 0) {
+      this.profileImage = event.target.files[0];
     }
   }
 }

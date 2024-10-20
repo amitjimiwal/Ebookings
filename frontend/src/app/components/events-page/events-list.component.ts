@@ -3,7 +3,6 @@ import { EventData } from '../../models/interface/event';
 import { EventService } from '../../services/event/event.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import { EventComponent } from '../event-card/event.component';
 import { Category } from '../../models/interface/categories';
