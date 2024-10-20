@@ -1,10 +1,63 @@
 <div class="container mx-auto mt-8">
   <h1 class="text-3xl font-bold mb-4">All Events</h1>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    @if(events.length>0){ @for (event of events; track $index) {
-    <event-card [event]="event"></event-card>
-    } }@else {
-    <h1 class="text-2xl font-bold">No Events Found</h1>
-    }
+  <!-- Categories Filter -->
+  <div class="flex flex-wrap gap-2 items-center mb-2">
+    <h1 class="text-lg font-semibold">Filter by Category:</h1>
+    <button
+      class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
+      *ngFor="let category of categories"
+      (click)="filterEvents(category.name)"
+      [class.bg-blue-700]="selectedCategory == category.name"
+      [class.text-white]="selectedCategory == category.name"
+    >
+      {{ category.name }}
+    </button>
+  </div>
+
+  <!-- Sort by Date and Price -->
+  <div class="flex flex-wrap gap-2 items-center mb-2">
+    <h1 class="text-lg font-semibold">Sort by:</h1>
+    <button
+      class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
+      (click)="sortEvents('date')"
+      [class.bg-blue-700]="sortType == 'date'"
+      [class.text-white]="sortType == 'date'"
+    >
+      Date
+    </button>
+    <button
+      class="bg-gray-200 text-gray-800 px-4 py-2 rounded-md"
+      (click)="sortEvents('price')"
+      [class.bg-blue-700]="sortType == 'price'"
+      [class.text-white]="sortType == 'price'"
+    >
+      Price
+    </button>
+
+    <!-- select tag high to low and low to high for this -->
+    <div>
+      <label for="sortOrder">Sort Order:</label>
+      <select
+        class="px-4 py-2 rounded-md ml-2"
+        id="sortOrder"
+        [(ngModel)]="sortOrder"
+        (change)="onSortOrderChange($event)"
+      >
+        <option value="0" disabled>Order By:</option>
+        <option value="highToLow">High to Low</option>
+        <option value="lowToHigh">Low to High</option>
+      </select>
+    </div>
+  </div>
+  <div class="flex flex-wrap gap-2 items-center mb-2">
+    <div class="flex flex-wrap gap-2">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        @if(events.length>0){ @for (event of events; track $index) {
+        <event-card [event]="event"></event-card>
+        } }@else {
+        <h1 class="text-2xl font-bold">No Events Found</h1>
+        }
+      </div>
+    </div>
   </div>
 </div>

@@ -31,9 +31,9 @@ namespace Ebooking.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetEvents()
+        public async Task<IActionResult> GetEvents([FromQuery] QueryParamsDTO queryParams)
         {
-            var EventsData = await eventRepository.GetAllEvents();
+            var EventsData = await eventRepository.GetAllEvents(queryParams);
             if (EventsData == null)
             {
                 return NotFound();
@@ -94,7 +94,11 @@ namespace Ebooking.Controllers
             {
                 return StatusCode(500, "Error while creating the event");
             }
-            return Ok("Successfully created the event");
+            return Ok(new
+            {
+                message = "Successfully created the event",
+                eventId = CreatedEvent.Id
+            });
         }
 
         private bool TotalTicketsValidation(int venueCapacity, List<CreateTicketDTO> ticketTypes)
@@ -136,6 +140,21 @@ namespace Ebooking.Controllers
             //upload the image
             await imageUploadService.UploadImageAsync(image, eventId);
             return Ok("Successfully uploaded all the images");
+        }
+
+        [HttpGet("Categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var categories = await eventRepository.GetEventCategories();
+            if (categories == null)
+            {
+                return NotFound();
+            }
+            return Ok(categories.Select(cat => new
+            {
+                cat.Id,
+                cat.Name
+            }));
         }
     }
 }

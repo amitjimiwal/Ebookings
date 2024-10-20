@@ -40,7 +40,7 @@ export class EventBookingComponent implements OnInit {
     // Fetch the corresponding event data
     this.eventService.getEventById(eventId).subscribe(event => {
       if (event) this.event = event;
-      this.totalPrice = this.event?.ticketPrice || 0;
+      // this.totalPrice = this.event?.ticketPrice || 0;
     }, (error) => {
       console.error(`Error occurred while getting the data of event with id ${eventId}`, error);
     }, () => {
@@ -51,7 +51,7 @@ export class EventBookingComponent implements OnInit {
   calculateTotalAmount(): void {
     if (this.event) {
       let tickets = this.bookingForm.get('noOfTickets')?.value || 1;
-      this.totalPrice = tickets * this.event.ticketPrice;
+      // this.totalPrice = tickets * this.event.ticketPrice;
     }
     console.log('Total amount updated to:', this.totalPrice);
   }
