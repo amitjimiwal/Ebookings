@@ -7,7 +7,7 @@ import { faCalendarAlt, faLocationDot } from '@fortawesome/free-solid-svg-icons'
 import { EventComponent } from '../event-card/event.component';
 import { Category } from '../../models/interface/categories';
 import { FormsModule } from '@angular/forms';
-
+type SearchTopic = 'EventName' | 'Venue';
 @Component({
   selector: 'app-events-list',
   standalone: true,
@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './events-list.component.html',
   styleUrl: './events-list.component.css'
 })
+
 export class EventsListComponent implements OnInit {
   venueIcon = faLocationDot;
   calenderIcon = faCalendarAlt;
@@ -22,6 +23,8 @@ export class EventsListComponent implements OnInit {
   private eventService = inject(EventService);
   categories: Category[] = [
   ];
+  searchQuery: string = '';
+  searchTopic: SearchTopic = 'EventName';
   sortType: string = '';
   selectedCategory: string = '';
   sortOrder: boolean = false;
@@ -49,10 +52,14 @@ export class EventsListComponent implements OnInit {
     this.updateEvents();
   }
   updateEvents(): void {
-    this.eventService.getEvents(this.selectedCategory, this.sortType, this.sortOrder).subscribe(events => this.events = events, (error) => {
+    this.eventService.getEvents(this.selectedCategory, this.sortType, this.sortOrder, this.searchQuery, this.searchTopic).subscribe(events => this.events = events, (error) => {
       console.error("Error occurred while getting the data of events", error);
     }, () => {
       console.log("Events data fetched successfully");
     });
+  }
+  OnSearchTopicChange(event: any): void {
+    this.searchTopic = event.target.value;
+    this.updateEvents();
   }
 }

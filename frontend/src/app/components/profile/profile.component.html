@@ -122,6 +122,14 @@
             {{ user?.phoneNumber }}
           </p>
           <p class="text-gray-700">
+            <span class="font-semibold">PreferredCurrency :</span>
+            {{ user?.preferredCurrency }}
+          </p>
+          <p class="text-gray-700">
+            <span class="font-semibold">PreferredLanguage ::</span>
+            {{ user?.preferredLanguage }}
+          </p>
+          <p class="text-gray-700">
             <span class="font-semibold">Created At:</span>
             {{ user?.createdAt | date : "medium" }}
           </p>

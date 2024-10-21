@@ -10,8 +10,8 @@ import { Category } from '../../models/interface/categories';
 export class EventService {
   http = inject(HttpClient);
   constructor() { }
-  getEvents(category: string, sortType: string, sortOrder: boolean): Observable<EventData[]> {
-    return this.http.get<EventData[]>(`http://localhost:5077/api/Events?Category=${category}&SortBy=${sortType}&IsDescending=${sortOrder}`);
+  getEvents(category: string, sortType: string, sortOrder: boolean, searchQuery: string, searchTopic: string): Observable<EventData[]> {
+    return this.http.get<EventData[]>(`http://localhost:5077/api/Events?SearchTopic=${searchTopic}&SearchQuery=${searchQuery}&Category=${category}&SortBy=${sortType}&IsDescending=${sortOrder}`);
   }
   getEventById(id: string): Observable<EventData> {
     return this.http.get<EventData>(`http://localhost:5077/api/Events/${id}`);

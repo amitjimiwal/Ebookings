@@ -12,5 +12,9 @@ namespace api.DTO.Events
 
         //specifies the order of the above SORTBY parameter
         public bool IsDescending { get; set; } = false;
+
+        public string? SearchTopic { get; set; } = null;
+
+        public string? SearchQuery { get; set; } = null;
     }
 }

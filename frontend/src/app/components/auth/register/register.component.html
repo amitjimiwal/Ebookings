@@ -27,7 +27,7 @@
       </div>
       <div class="mb-4">
         <label for="phoneNumber" class="block mb-2"
-          >Phone<span class="text-gray-500">*</span></label
+          >Phone<span class="text-red-500">*</span></label
         >
         <input
           type="tel"
@@ -44,6 +44,28 @@
           type="password"
           id="password"
           formControlName="password"
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="PreferredCurrency" class="block mb-2"
+          >PreferredCurrency</label
+        >
+        <input
+          type="text"
+          id="PreferredCurrency"
+          formControlName="PreferredCurrency"
+          class="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="PreferredLanguage" class="block mb-2"
+          >PreferredLanguage</label
+        >
+        <input
+          type="text"
+          id="PreferredLanguage"
+          formControlName="PreferredLanguage"
           class="w-full px-3 py-2 border rounded"
         />
       </div>
@@ -68,5 +90,11 @@
         Register
       </button>
     </form>
+    <div class="mt-2">
+      Already have an account?
+      <a [routerLink]="['/login']" class="underline hover:text-blue-500"
+        >Login</a
+      >
+    </div>
   </div>
 </div>

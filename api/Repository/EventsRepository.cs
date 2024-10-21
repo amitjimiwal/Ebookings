@@ -42,7 +42,19 @@ namespace Ebooking.Repository
         public async Task<List<Events>> GetAllEvents(QueryParamsDTO query)
         {
             var allEvents = Db.Events.Include(eve => eve.Category).Include(eve => eve.EventImages).Include(eve => eve.TicketTypes).AsQueryable();
-            
+
+            //search by name or venue
+            if (!string.IsNullOrWhiteSpace(query.SearchTopic) && !string.IsNullOrWhiteSpace(query.SearchQuery))
+            {
+                if (query.SearchTopic.Equals("EventName", StringComparison.OrdinalIgnoreCase))
+                {
+                    allEvents = allEvents.Where(e => e.EventName.StartsWith(query.SearchQuery));
+                };
+                if (query.SearchTopic.Equals("Venue", StringComparison.OrdinalIgnoreCase))
+                {
+                    allEvents = allEvents.Where(e => e.Venue.Name.Contains(query.SearchQuery));
+                };
+            }
             //filter by category
             if (!string.IsNullOrWhiteSpace(query.Category))
             {

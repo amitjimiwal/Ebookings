@@ -42,8 +42,8 @@ export class RegisterComponent implements OnInit {
         password: this.registerForm.get('password')?.value,
         phoneNumber: this.registerForm.get('phoneNumber')?.value || undefined,
         ProfilePicture: this.profileImage,
-        PreferredLanguage: this.registerForm.get('PreferredLanguage')?.value || 'INR',
-        PreferredCurrency: this.registerForm.get('PreferredCurrency')?.value || 'English'
+        PreferredLanguage: this.registerForm.get('PreferredLanguage')?.value || 'English',
+        PreferredCurrency: this.registerForm.get('PreferredCurrency')?.value || 'INR'
       };
       this.authService.signUp(registerDto).subscribe((data) => {
         alert("Registration Successful , Please Login");
