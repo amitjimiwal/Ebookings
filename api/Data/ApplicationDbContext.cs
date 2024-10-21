@@ -20,6 +20,8 @@ namespace Ebooking.Data
         public DbSet<Bookings> Bookings { get; set; }
         public DbSet<TicketTypes> TicketTypes { get; set; }
         public DbSet<EventImage> EventImages { get; set; }
+        public DbSet<PaymentInformation> PaymentInformation { get; set; }
+        public DbSet<CouponCode> CouponCodes { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -36,20 +38,23 @@ namespace Ebooking.Data
                 entity.HasIndex(e => e.UserName).IsUnique();
                 entity.HasIndex(e => e.Email).IsUnique();
             });
-            
+
             // Embed Venue as a value object in the Event
             builder.Entity<Events>()
                 .OwnsOne(e => e.Venue);
 
-             builder.Entity<Events>()
-                .HasMany(e => e.TicketTypes)
-                .WithOne(t => t.Event); // Use the correct navigation property in TicketType  // Set explicit foreign key property
+            builder.Entity<Events>()
+               .HasMany(e => e.TicketTypes)
+               .WithOne(t => t.Event); // Use the correct navigation property in TicketType  // Set explicit foreign key property
 
             // Configure relationships between Event and EventImage
             builder.Entity<Events>()
                 .HasMany(e => e.EventImages)
                 .WithOne(i => i.Event)  // Use the correct navigation property in EventImage
                 .HasForeignKey(i => i.EventID);  // Set explicit foreign key property
+
+            builder.Entity<Bookings>()
+                .OwnsOne(e => e.TicketInformation);
         }
     }
 }

@@ -18,8 +18,8 @@ namespace Ebooking.DTO.Bookings
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        // [Phone]
-        public long PhoneNumber { get; set; }
+        [StringLength(10, ErrorMessage = "Phone number must be 10 digits")]
+        public string PhoneNumber { get; set; }
 
         [Required]
 
@@ -27,7 +27,7 @@ namespace Ebooking.DTO.Bookings
 
         [Required]
         public int NoOfTickets { get; set; }
-        
+
         [Required]
         public decimal TotalPrice { get; set; }
     }

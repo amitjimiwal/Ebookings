@@ -20,8 +20,7 @@ namespace api.Mapper
                 Email = bookTicketDTO.Email,
                 PhoneNumber = bookTicketDTO.PhoneNumber,
                 EventId = bookTicketDTO.EventId,
-                NoOfTickets = bookTicketDTO.NoOfTickets,
-                TotalPrice = bookTicketDTO.TotalPrice,
+                TotalTicketsPurchased = bookTicketDTO.NoOfTickets,
                 BookedAt = DateTime.Now,
             };
         }
@@ -35,8 +34,8 @@ namespace api.Mapper
                 Email = bookings.Email,
                 PhoneNumber = bookings.PhoneNumber,
                 EventId = bookings.EventId,
-                NoOfTickets = bookings.NoOfTickets,
-                TotalPrice = bookings.TotalPrice,
+                NoOfTickets = bookings.TotalTicketsPurchased,
+                TotalPrice = bookings.PaymentInformation.AmountPaid,
                 BookedAt = bookings.BookedAt,
                 AppUserID = bookings.AppUserID
             };
@@ -51,8 +50,8 @@ namespace api.Mapper
                 Email = bookings.Email,
                 PhoneNumber = bookings.PhoneNumber,
                 EventId = bookings.EventId,
-                NoOfTickets = bookings.NoOfTickets,
-                TotalPrice = bookings.TotalPrice,
+                NoOfTickets = bookings.TotalTicketsPurchased,
+                TotalPrice = bookings.PaymentInformation.AmountPaid,
                 BookedAt = bookings.BookedAt,
                 AppUserID = bookings.AppUserID,
                 EventName = bookings.Event.EventName,

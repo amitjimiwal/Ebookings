@@ -38,7 +38,7 @@ namespace Ebooking.Models
         {
             get
             {
-                return TicketTypes.Sum(ticket => ticket.AvailableTickets) ;
+                return TicketTypes.Sum(ticket => ticket.AvailableTickets);
             }
         }
 
@@ -70,6 +70,8 @@ namespace Ebooking.Models
         public ICollection<EventImage> EventImages { get; set; } = new List<EventImage>(); //navigation property for images
 
         public ICollection<TicketTypes> TicketTypes { get; set; } = new List<TicketTypes>();//navigation property for ticket types
+
+        public ICollection<CouponCode> EventCouponCodes { get; set; } = new List<CouponCode>(); //navigation property for coupon codes
     }
     public class Venue
     {

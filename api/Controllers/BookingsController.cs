@@ -171,11 +171,11 @@ namespace Ebooking.Controllers
                 return StatusCode(500, "An error occurred while deleting the booking.");
             }
             //update the event available tickets
-            var eventObj = await EventRepository.IncreaseEventTicketCount(bookingData.EventId, bookingData.NoOfTickets);
-            if (eventObj == null)
-            {
-                return StatusCode(500, "An error occurred while updating the event tickets.");
-            }
+            // var eventObj = await EventRepository.IncreaseEventTicketCount(bookingData.EventId, bookingData.NoOfTickets);
+            // if (eventObj == null)
+            // {
+            //     return StatusCode(500, "An error occurred while updating the event tickets.");
+            // }
             return Ok();
         }
     }
