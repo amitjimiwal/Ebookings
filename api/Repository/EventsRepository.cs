@@ -48,7 +48,7 @@ namespace Ebooking.Repository
             {
                 if (query.SearchTopic.Equals("EventName", StringComparison.OrdinalIgnoreCase))
                 {
-                    allEvents = allEvents.Where(e => e.EventName.StartsWith(query.SearchQuery));
+                    allEvents = allEvents.Where(e => e.EventName.Contains(query.SearchQuery));
                 };
                 if (query.SearchTopic.Equals("Venue", StringComparison.OrdinalIgnoreCase))
                 {

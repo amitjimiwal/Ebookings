@@ -15,24 +15,22 @@ namespace api.Models
         public Guid Id { get; set; }
 
         [Required]
-        public Guid BookingId { get; set; }
-
-        [Required]
         public PaymentStatus Status { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal AmountPaid { get; set; }
-        public string TransactionId { get; set; }
+        public decimal AmountToBePaid { get; set; }
+
+        public Guid TransactionId { get; set; }
         public string PaymentMethod { get; set; }
 
         [Required]
         public string Currency { get; set; } = "INR";
 
-        [ForeignKey("BookingId")]
-        public virtual Bookings Booking { get; set; }
+        [Required]
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Pending;
 
-        public DateTime ExpiryTime { get; set; }= DateTime.Now.AddMinutes(30);
+        public DateTime ExpiryTime { get; set; } = DateTime.Now.AddMinutes(15);
 
         [NotMapped]
         public bool IsPaymentSessionExpired
@@ -44,6 +42,11 @@ namespace api.Models
         }
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        public Guid CheckoutSessionId { get; set; }
+
+        [ForeignKey("CheckoutSessionId")]
+        public CheckoutSession CheckoutSession { get; set; }
     }
 
     public enum PaymentStatus

@@ -22,6 +22,7 @@ namespace Ebooking.Data
         public DbSet<EventImage> EventImages { get; set; }
         public DbSet<PaymentInformation> PaymentInformation { get; set; }
         public DbSet<CouponCode> CouponCodes { get; set; }
+        public DbSet<CheckoutSession> CheckoutSessions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -43,6 +44,9 @@ namespace Ebooking.Data
             builder.Entity<Events>()
                 .OwnsOne(e => e.Venue);
 
+            builder.Entity<CheckoutSession>()
+                .OwnsMany(c => c.Tickets);
+
             builder.Entity<Events>()
                .HasMany(e => e.TicketTypes)
                .WithOne(t => t.Event); // Use the correct navigation property in TicketType  // Set explicit foreign key property
@@ -53,8 +57,6 @@ namespace Ebooking.Data
                 .WithOne(i => i.Event)  // Use the correct navigation property in EventImage
                 .HasForeignKey(i => i.EventID);  // Set explicit foreign key property
 
-            builder.Entity<Bookings>()
-                .OwnsOne(e => e.TicketInformation);
         }
     }
 }

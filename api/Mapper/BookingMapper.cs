@@ -11,16 +11,12 @@ namespace api.Mapper
 {
     public static class BookingMapper
     {
-        public static Bookings CreateBookingFromDTO(this BookTicketDTO bookTicketDTO, string userId)
+        public static Bookings CreateBookingFromDTO(this BookTicketDTO bookTicketDTO, string userId, Guid CheckoutSessionId)
         {
             return new Bookings
             {
-                Name = bookTicketDTO.Name,
                 AppUserID = userId,
-                Email = bookTicketDTO.Email,
-                PhoneNumber = bookTicketDTO.PhoneNumber,
-                EventId = bookTicketDTO.EventId,
-                TotalTicketsPurchased = bookTicketDTO.NoOfTickets,
+                CheckoutSessionId = CheckoutSessionId,
                 BookedAt = DateTime.Now,
             };
         }
@@ -30,12 +26,12 @@ namespace api.Mapper
             return new BookingDTO
             {
                 Id = bookings.Id,
-                Name = bookings.Name,
-                Email = bookings.Email,
-                PhoneNumber = bookings.PhoneNumber,
-                EventId = bookings.EventId,
-                NoOfTickets = bookings.TotalTicketsPurchased,
-                TotalPrice = bookings.PaymentInformation.AmountPaid,
+                Name = bookings.CheckoutSession.Name,
+                Email = bookings.CheckoutSession.Email,
+                PhoneNumber = bookings.CheckoutSession.PhoneNumber,
+                EventId = bookings.CheckoutSession.EventId,
+                NoOfTickets = bookings.CheckoutSession.TotalTicketsPurchased,
+                TotalPrice = bookings.CheckoutSession.FinalAmount,
                 BookedAt = bookings.BookedAt,
                 AppUserID = bookings.AppUserID
             };
@@ -46,19 +42,19 @@ namespace api.Mapper
             return new UserBookingDTO
             {
                 Id = bookings.Id,
-                Name = bookings.Name,
-                Email = bookings.Email,
-                PhoneNumber = bookings.PhoneNumber,
-                EventId = bookings.EventId,
-                NoOfTickets = bookings.TotalTicketsPurchased,
-                TotalPrice = bookings.PaymentInformation.AmountPaid,
+                Name = bookings.CheckoutSession.Name,
+                Email = bookings.CheckoutSession.Email,
+                PhoneNumber = bookings.CheckoutSession.PhoneNumber,
+                EventId = bookings.CheckoutSession.EventId,
+                NoOfTickets = bookings.CheckoutSession.TotalTicketsPurchased,
+                TotalPrice = bookings.CheckoutSession.FinalAmount,
                 BookedAt = bookings.BookedAt,
                 AppUserID = bookings.AppUserID,
-                EventName = bookings.Event.EventName,
-                EventLocation = bookings.Event.Venue.Address,
-                BannerImages = bookings.Event.EventImages.Select(image => image.ImageUrl).ToList(),
-                Description = bookings.Event.Description,
-                EventDate = bookings.Event.Date
+                EventName = bookings.CheckoutSession.Event.EventName,
+                EventLocation = bookings.CheckoutSession.Event.Venue.Address,
+                BannerImages = bookings.CheckoutSession.Event.EventImages.Select(image => image.ImageUrl).ToList(),
+                Description = bookings.CheckoutSession.Event.Description,
+                EventDate = bookings.CheckoutSession.Event.Date
             };
         }
     }

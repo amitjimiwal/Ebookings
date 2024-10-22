@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using api.DTO.Bookings;
 
 namespace Ebooking.DTO.Bookings
 {
@@ -29,6 +30,22 @@ namespace Ebooking.DTO.Bookings
         public int NoOfTickets { get; set; }
 
         [Required]
+        public decimal TotalPrice { get; set; }
+
+        [Required]
+        [MinLength(1, ErrorMessage = "Ticket information must be provided")]
+        public ICollection<TicketInformationDTO> TicketInformation { get; set; }
+    }
+    public class TicketInformationDTO
+    {
+        [Required]
+        public Guid TicketTypeID { get; set; }
+
+        [Required]
+        public int Quantity { get; set; }
+
+        [Required]
+        public string TicketName { get; set; }
         public decimal TotalPrice { get; set; }
     }
 }

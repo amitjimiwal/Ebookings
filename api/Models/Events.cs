@@ -76,15 +76,15 @@ namespace Ebooking.Models
     public class Venue
     {
         [Required]
-        [MaxLength(255)]  // Venue name length
+        [MaxLength(255)]
         public string Name { get; set; }
 
         [Required]
-        [MaxLength(500)]  // Venue address length
+        [MaxLength(500)]
         public string Address { get; set; }
 
         [Required]
-        [MaxLength(100)]  // State length
+        [MaxLength(100)]
         public string State { get; set; }
 
         [Required]

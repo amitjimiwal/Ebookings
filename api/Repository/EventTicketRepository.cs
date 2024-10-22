@@ -7,6 +7,7 @@ using api.Interface;
 using api.Models;
 using Ebooking.Data;
 using Ebooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Repository
 {
@@ -38,6 +39,12 @@ namespace api.Repository
                 ticketTypes.Add(ticketItem);
             }
             return ticketTypes;
+        }
+
+        public async Task<TicketTypes?> GetTicketTypebyID(Guid TicketTypeID)
+        {
+            var ticket = await DbContext.TicketTypes.FirstOrDefaultAsync(ticket => ticket.Id == TicketTypeID);
+            return ticket;
         }
     }
 }

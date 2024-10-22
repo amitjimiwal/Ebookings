@@ -56,7 +56,7 @@ namespace Ebooking.Controllers
             {
                 return BadRequest("Tickets Exceeds Maximum Allowed");
             }
-            //get booking count for the event by the person if already done
+            //get booking count for the event by the person if already done prior
             int BookingCount = await BookingRepository.GetBookingsCount(bookTicketDTO.EventId, appUser.Id);
             if (BookingCount >= eventData.MaxTicketsPerAccount)
             {
@@ -70,7 +70,7 @@ namespace Ebooking.Controllers
             }
 
             //create booking object from DTO
-            var BookingObject = bookTicketDTO.CreateBookingFromDTO(appUser.Id);
+            var BookingObject = bookTicketDTO.CreateBookingFromDTO(appUser.Id, new Guid());
 
             //Update the events table available tickets
             var eventObj = await EventRepository.UpdateEventTicketCount(bookTicketDTO.EventId, bookTicketDTO.NoOfTickets);
@@ -152,7 +152,7 @@ namespace Ebooking.Controllers
 
 
             //get the event details
-            var eventData = await EventRepository.GetEventById(bookingData.EventId);
+            var eventData = await EventRepository.GetEventById(bookingData.CheckoutSession.EventId);
             if (eventData == null)
             {
                 return NotFound("Event Not Found");

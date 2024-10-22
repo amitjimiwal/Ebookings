@@ -11,5 +11,7 @@ namespace api.Interface
     public interface IEventTicketRepository
     {
         Task<List<TicketTypes>> CreateTicketForEvent(List<CreateTicketDTO> ticket, Guid eventId);
+
+        Task<TicketTypes?> GetTicketTypebyID(Guid TicketTypeID);
     }
 }

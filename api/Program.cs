@@ -33,6 +33,9 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IImageUploadService, ImageUploadService>();
 builder.Services.AddScoped<IEventImageRepository, EventImageRepository>();
 builder.Services.AddScoped<IEventTicketRepository, EventTicketRepository>();
+builder.Services.AddScoped<ICheckoutRepository,CheckoutRepository>();
+builder.Services.AddScoped<IPaymentRepository,PaymentRepository>();
+builder.Services.AddScoped<ICouponCodeRepository,CouponCodeRepository>();
 
 //add identity of application user as Dependency Injection
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
