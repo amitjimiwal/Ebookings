@@ -5,11 +5,15 @@ using System.Threading.Tasks;
 using api.DTO.Checkout;
 using api.Interface;
 using api.Mapper;
+using api.Models;
 using Ebooking.Data;
 using Ebooking.Interface;
 using Ebooking.Migrations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
+using stockapi.Extensions;
 
 namespace api.Controllers
 {
@@ -24,34 +28,69 @@ namespace api.Controllers
 
         private readonly ICouponCodeRepository couponCodeRepository;
 
+        private readonly ICheckoutRepository CheckoutRepository;
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly IPaymentRepository PaymentRepository;
+
         private readonly ApplicationDbContext DbContext;
-        public CheckoutController(IEventRepository eventRepository, IBookingRepository bookingRepository, ApplicationDbContext dbContext, IEventTicketRepository eventTicket, ICouponCodeRepository couponCode)
+        public CheckoutController(IEventRepository eventRepository, IBookingRepository bookingRepository, ApplicationDbContext dbContext, IEventTicketRepository eventTicket, ICouponCodeRepository couponCode, ICheckoutRepository checkout, UserManager<ApplicationUser> userManager, IPaymentRepository paymentRepository)
         {
             EventRepository = eventRepository;
             BookingRepository = bookingRepository;
             DbContext = dbContext;
             eventTicketRepository = eventTicket;
             couponCodeRepository = couponCode;
+            CheckoutRepository = checkout;
+            _userManager = userManager;
+            PaymentRepository = paymentRepository;
         }
 
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateCheckOutSession([FromBody] CreateCheckoutSessionDTO createCheckoutSessionDTO)
         {
+            Console.WriteLine("CreateCheckOutSession");
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+            Console.WriteLine("Complete Validation");
             /* 
                 FLOW
             */
 
+            //get the user from the claims
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
             //get the event details
             var EventData = await EventRepository.GetEventById(createCheckoutSessionDTO.EventId);
             if (EventData == null)
             {
                 return NotFound("Event Not Found");
             }
+
+            //coupon code validation
+            if (!string.IsNullOrWhiteSpace(createCheckoutSessionDTO.CouponCode))
+            {
+                var CouponData = await couponCodeRepository.GetCouponCodeById(createCheckoutSessionDTO.CouponCode, createCheckoutSessionDTO.EventId);
+                if (CouponData == null) return BadRequest("Coupon Invalid for this Event");
+                if (CouponData.Expiry < DateTime.Now) return BadRequest("Coupon Expired");
+                if (CouponData.CurrentUsage <= 0) return BadRequest("Coupon Expired");
+                if (CouponData.CurrentUsage < createCheckoutSessionDTO.TotalTickets) return BadRequest("Coupon Expired");
+                createCheckoutSessionDTO.DiscountAmount = (CouponData.DiscountPercentage / 100) * createCheckoutSessionDTO.TotalPrice;
+                createCheckoutSessionDTO.FinalAmount = createCheckoutSessionDTO.TotalPrice - createCheckoutSessionDTO.DiscountAmount.Value;
+            }
+            else
+            {
+                createCheckoutSessionDTO.FinalAmount = createCheckoutSessionDTO.TotalPrice;
+            }
+
             // validate the dto first - 1. check total price , total tickets (sum)
             if (!createCheckoutSessionDTO.IsDTOPriceAccurate() || !createCheckoutSessionDTO.IsDTOTicketsCountAccurate())
             {
@@ -81,17 +120,32 @@ namespace api.Controllers
                     return BadRequest($"Invalid pricing for {ticket.TicketDisplayName}");
                 }
             }
-            
+
             // create a checkout session
 
-            //create a payment session
+            Console.WriteLine($"{user.Id}");
+            var CheckoutStatus = await CheckoutRepository.CreateCheckoutSession(createCheckoutSessionDTO.CreateCheckoutFromDTO(user.Id));
+            if (CheckoutStatus.Id.Equals(Guid.Empty))
+            {
+                return BadRequest("Failed to create a checkout session");
+            }
 
+            //create a payment session
+            var PaymentStatus = await PaymentRepository.CreatePaymentInformation(CheckoutStatus.CreatePaymentSession());
+            if (PaymentStatus.Id.Equals(Guid.Empty))
+            {
+                return BadRequest("Failed to create a payment session");
+            }
             /*
             Send Back the response :{
                 CheckoutSessionId,PaymentSessionID
             }
              */
-            return Ok();
+            return Ok(new
+            {
+                CheckoutID = CheckoutStatus.Id,
+                PaymentID = PaymentStatus.Id
+            });
         }
 
         [HttpGet]
@@ -109,7 +163,7 @@ namespace api.Controllers
 
             if (CouponData == null) return NotFound("Coupon Invalid for this Event");
 
-            return Ok(CouponData);
+            return Ok(CouponData.CreateDTOForCoupon());
         }
 
         [HttpPost]

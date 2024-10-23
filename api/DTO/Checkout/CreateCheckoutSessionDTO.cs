@@ -37,10 +37,12 @@ namespace api.DTO.Checkout
         public decimal FinalAmount { get; set; }
         public bool IsDTOPriceAccurate()
         {
+            Console.WriteLine(FinalAmount);
             return FinalAmount == Tickets.Sum(x => x.TicketQuantity * x.SingleticketPrice);
         }
         public bool IsDTOTicketsCountAccurate()
         {
+            Console.WriteLine(Tickets.Sum(x => x.TicketQuantity));
             return TotalTickets == Tickets.Sum(x => x.TicketQuantity);
         }
     }
@@ -57,6 +59,5 @@ namespace api.DTO.Checkout
 
         [Required]
         public string TicketDisplayName { get; set; } = string.Empty;
-
     }
 }

@@ -17,5 +17,17 @@ namespace api.Mapper
                 Expiry = createCouponDTO.Expiry
             };
         }
+        public static CouponDTO CreateDTOForCoupon(this CouponCode couponCode)
+        {
+            return new CouponDTO()
+            {
+                Code = couponCode.Code,
+                EventId = couponCode.EventId,
+                DiscountPercentage = couponCode.DiscountPercentage,
+                MaxUsage = couponCode.MaxUsage,
+                CurrentUsage = couponCode.CurrentUsage,
+                Expiry = couponCode.Expiry,
+            };
+        }
     }
 }
