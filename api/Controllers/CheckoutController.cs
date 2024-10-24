@@ -95,6 +95,15 @@ namespace api.Controllers
             {
                 return BadRequest("DTO is not accurate in terms of price or tickets count");
             }
+
+            //validate booking count doesn't exceed the limit of booking per account
+            var BookingCount = await BookingRepository.GetBookingsCount(createCheckoutSessionDTO.EventId, user.Id);
+            if (BookingCount + createCheckoutSessionDTO.TotalTickets > EventData.MaxTicketsPerAccount)
+            {
+                return BadRequest($"You can only book {EventData.MaxTicketsPerAccount} tickets for this event from this account");
+            }
+
+
             //2. validate tickets with the actual event and ticket information
             foreach (var ticket in createCheckoutSessionDTO.Tickets)
             {
@@ -122,14 +131,14 @@ namespace api.Controllers
 
             // create a checkout session
             var CheckoutStatus = await CheckoutRepository.CreateCheckoutSession(createCheckoutSessionDTO.CreateCheckoutFromDTO(user.Id));
-            if (CheckoutStatus.Id.Equals(Guid.Empty))
+            if (CheckoutStatus.Id.Equals(Guid.Empty) || CheckoutStatus == null)
             {
                 return BadRequest("Failed to create a checkout session");
             }
 
             //create a payment session
             var PaymentStatus = await PaymentRepository.CreatePaymentInformation(CheckoutStatus.CreatePaymentSession());
-            if (PaymentStatus.Id.Equals(Guid.Empty))
+            if (PaymentStatus.Id.Equals(Guid.Empty) || PaymentStatus == null)
             {
                 return BadRequest("Failed to create a payment session");
             }
@@ -140,6 +149,7 @@ namespace api.Controllers
              */
             return Ok(new
             {
+                message = "Checkout Session Created Successfully. It's Valid for next 30 minutes",
                 CheckoutID = CheckoutStatus.Id,
                 PaymentID = PaymentStatus.Id
             });
@@ -232,8 +242,10 @@ namespace api.Controllers
                 return BadRequest("Payment Amount Mismatch");
             }
             var transactionId = Guid.NewGuid();
-            PaymentData.TransactionId = transactionId;
             //update the payment status
+            PaymentData.TransactionId = transactionId;
+            PaymentData.PaymentStatus = Models.PaymentStatus.Completed;
+            PaymentData.ExpiryTime = DateTime.Now;
             var PaymentStatus = await PaymentRepository.UpdatePayment(PaymentData);
             if (!PaymentStatus)
             {
@@ -241,7 +253,7 @@ namespace api.Controllers
             }
 
             //update the checkout status
-            // CheckoutData.PaymentInformationId = createPaymentDTO.PaymentID;
+            CheckoutData.ExpiryTime = DateTime.Now;
             var CheckoutStatus = await CheckoutRepository.UpdateCheckoutSession(CheckoutData);
             if (!CheckoutStatus)
             {
@@ -298,7 +310,7 @@ namespace api.Controllers
             {
                 return BadRequest("Payment Session Already valid");
             }
-            paymentData.ExpiryTime = DateTime.Now.AddMinutes(15);
+            paymentData.ExpiryTime = DateTime.Now.AddMinutes(30);
             //update the expiry time
             checkoutData.ExpiryTime = DateTime.Now.AddMinutes(30);
 

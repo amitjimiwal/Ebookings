@@ -20,8 +20,6 @@ uploads/
 .DS_Store
 .AppleDouble
 .LSOverride
-Models/Migrations/
-
 # Icon must end with two \r
 Icon
 

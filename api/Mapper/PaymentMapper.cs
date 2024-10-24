@@ -18,7 +18,7 @@ namespace api.Mapper
                 AmountToBePaid = checkoutSession.FinalAmount,
                 Currency = "INR",
                 CreatedAt = DateTime.Now,
-                ExpiryTime = DateTime.Now.AddMinutes(15),
+                ExpiryTime = DateTime.Now.AddMinutes(30),
             };
         }
     }
