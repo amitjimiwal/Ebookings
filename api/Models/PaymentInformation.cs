@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Ebooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Models
 {
@@ -46,6 +47,7 @@ namespace api.Models
         public Guid CheckoutSessionId { get; set; }
 
         [ForeignKey("CheckoutSessionId")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public CheckoutSession CheckoutSession { get; set; }
     }
 

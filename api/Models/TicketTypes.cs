@@ -12,6 +12,7 @@ namespace api.Models
         public Guid Id { get; set; }
 
         // Foreign key relationship with the Events table
+        [ForeignKey("EventId")]
         public Events Event { get; set; }  // Navigation property for the related Event
 
         public Guid EventId { get; set; }

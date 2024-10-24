@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Ebooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Models
 {
@@ -19,6 +20,8 @@ namespace api.Models
         public string AppUserID { get; set; }
 
         //Navigation Property
+        [ForeignKey("AppUserID")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public ApplicationUser AppLicationUser { get; set; }
 
         [Required]
@@ -39,6 +42,7 @@ namespace api.Models
         public Guid EventId { get; set; }
 
         [ForeignKey("EventId")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public Events Event { get; set; }
 
         //ticket purchase and amount information
@@ -73,9 +77,6 @@ namespace api.Models
         //utility function
         [NotMapped]
         public bool IsCheckoutSessionExpired => DateTime.Now > ExpiryTime;
-
-        //payment information relationship
-        public Guid PaymentInformationId { get; set; }
         public PaymentInformation PaymentInformation { get; set; }
         public ICollection<Tickets> Tickets { get; set; } = new List<Tickets>();
     }

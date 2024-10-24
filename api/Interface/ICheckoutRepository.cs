@@ -9,5 +9,8 @@ namespace api.Interface
     public interface ICheckoutRepository
     {
         Task<CheckoutSession> CreateCheckoutSession(CheckoutSession checkoutSession);
+
+        Task<CheckoutSession?> GetCheckoutSession(Guid checkoutSessionID);
+        Task<bool> UpdateCheckoutSession(CheckoutSession checkoutSession);
     }
 }

@@ -55,7 +55,7 @@ namespace api.Mapper
                 Venue = createEventDTO.Venue,
                 MaxTicketsPerAccount = createEventDTO.MaxTicketsPerAccount,
                 CategoryId = createEventDTO.CategoryId,
-                ApplicationUserID = userID
+                AppUserID = userID
             };
         }
     }

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Ebooking.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Models
 {
@@ -30,6 +31,9 @@ namespace api.Models
         public int CurrentUsage { get; set; }
 
         public Guid EventId { get; set; }
+
+        [ForeignKey("EventId")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public Events Event { get; set; }
     }
 }

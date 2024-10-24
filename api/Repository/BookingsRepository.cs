@@ -58,7 +58,7 @@ namespace Ebooking.Repository
             var BookingsForEventByUser = Db.Bookings.Include(b => b.CheckoutSession).AsQueryable();
 
             //filter out the bookings of user
-            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppUserID == appUserID && booking.CheckoutSession.EventId == eventId);
+            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppLicationUser.Id == appUserID && booking.CheckoutSession.EventId == eventId);
 
             //find the total sum od tickets purchased by the user
             var totalBookings = await BookingsForEventByUser.SumAsync(booking => booking.CheckoutSession.TotalTicketsPurchased);
@@ -68,7 +68,7 @@ namespace Ebooking.Repository
 
         public async Task<List<Bookings>> GetBookingsForUser(string userId)
         {
-            var bookingsData = Db.Bookings.AsQueryable();
+            var bookingsData = Db.Bookings.Include(b => b.CheckoutSession).Include(b => b.CheckoutSession.PaymentInformation).Include(b => b.CheckoutSession.Event).AsQueryable();
             var b = await bookingsData.Where(x => x.AppUserID == userId).ToListAsync();
             return b;
         }

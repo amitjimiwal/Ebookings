@@ -131,7 +131,7 @@ namespace Ebooking.Controllers
             }
 
             //validate if the correct user is trying to upload the image
-            if (eventData.ApplicationUserID != appUser.Id)
+            if (eventData.AppUserID != appUser.Id)
             {
                 return Unauthorized("You are not authorized to upload images for this event");
             }

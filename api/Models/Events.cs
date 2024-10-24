@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ebooking.Models
 {
@@ -53,9 +54,11 @@ namespace Ebooking.Models
         public int MaxTicketsPerAccount { get; set; }
 
         // for user creating events
-        public string ApplicationUserID { get; set; }
+        public string AppUserID { get; set; }
 
-        public ApplicationUser applicationUser { get; set; }
+        [ForeignKey("AppUserID")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
+        public ApplicationUser ApplicationUser { get; set; }
 
         // Navigation property
         // Foreign key

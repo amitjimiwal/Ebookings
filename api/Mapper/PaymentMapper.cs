@@ -17,9 +17,8 @@ namespace api.Mapper
                 PaymentMethod = "CARD",
                 AmountToBePaid = checkoutSession.FinalAmount,
                 Currency = "INR",
-                CreatedAt = DateTime.UtcNow,
-                ExpiryTime = DateTime.UtcNow.AddMinutes(15),
-                TransactionId= Guid.NewGuid()
+                CreatedAt = DateTime.Now,
+                ExpiryTime = DateTime.Now.AddMinutes(15),
             };
         }
     }

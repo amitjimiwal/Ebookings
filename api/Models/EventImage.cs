@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Ebooking.Models;
@@ -20,6 +21,9 @@ namespace api.Models
 
         [Required]
         public Guid EventID { get; set; }
+
+        [ForeignKey("EventID")]
+        [DeleteBehavior(DeleteBehavior.NoAction)]
         public Events Event { get; set; } //navigation property
     }
 }

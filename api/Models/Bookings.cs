@@ -18,6 +18,7 @@ namespace Ebooking.Models
         public string AppUserID { get; set; }
 
         //Navigation Property
+        [ForeignKey("AppUserID")]
         public ApplicationUser AppLicationUser { get; set; }
 
         // [Required]

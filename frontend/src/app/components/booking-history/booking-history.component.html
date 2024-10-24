@@ -35,7 +35,6 @@
         </p>
       </div>
     </div>
-
     <div class="flex justify-between items-center">
       <div class="flex items-center">
         <svg
@@ -78,7 +77,21 @@
         <span class="text-gray-700">{{ booking.eventLocation }}</span>
       </div>
     </div>
-
+    @for (ticket of booking.tickets; track $index) {
+    <div class="bg-white rounded-lg p-4">
+      <div class="flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-bold text-red-500">
+            {{ ticket.ticketName }}
+          </h3>
+          <p class="text-black">₹{{ ticket.totalPrice / ticket.quantity }}</p>
+          <p class="text-gray-500 text-sm">
+            <span class=""> Tickets Bought: </span>{{ ticket.quantity }}
+          </p>
+        </div>
+      </div>
+    </div>
+    }
     <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
       <div>
         <p class="text-sm text-gray-600">Total Price</p>

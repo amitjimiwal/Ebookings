@@ -3,7 +3,6 @@ export interface EventBooking {
      eventLocation: string;
      eventDate: string; // ISO string format for date
      description: string;
-     bannerImg: string;
      id: string; // Unique identifier for the booking
      name: string; // Name of the user booking the event
      email: string; // Email address of the user
@@ -13,4 +12,11 @@ export interface EventBooking {
      bookedAt: string; // ISO string format for booking date and time
      totalPrice: number; // Total price for the tickets
      appUserID: string; // Unique identifier for the user in the app
+     tickets: Ticket[]; // Array of tickets booked
+}
+interface Ticket {
+     ticketTypeId: string;
+     quantity: number;
+     ticketName: string;
+     totalPrice: number;
 }

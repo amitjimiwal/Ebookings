@@ -10,42 +10,12 @@ namespace Ebooking.DTO.Bookings
     public class BookTicketDTO
     {
         [Required]
-        [MinLength(3, ErrorMessage = "Name must be atleast 3 characters")]
-        [MaxLength(256, ErrorMessage = "Name must not exceed 50 characters")]
-        public string Name { get; set; } = string.Empty;
+        public Guid EventID { get; set; }
 
         [Required]
-        [EmailAddress]
-        public string Email { get; set; } = string.Empty;
+        public Guid AppUserId { get; set; }
 
         [Required]
-        [StringLength(10, ErrorMessage = "Phone number must be 10 digits")]
-        public string PhoneNumber { get; set; }
-
-        [Required]
-
-        public Guid EventId { get; set; }
-
-        [Required]
-        public int NoOfTickets { get; set; }
-
-        [Required]
-        public decimal TotalPrice { get; set; }
-
-        [Required]
-        [MinLength(1, ErrorMessage = "Ticket information must be provided")]
-        public ICollection<TicketInformationDTO> TicketInformation { get; set; }
-    }
-    public class TicketInformationDTO
-    {
-        [Required]
-        public Guid TicketTypeID { get; set; }
-
-        [Required]
-        public int Quantity { get; set; }
-
-        [Required]
-        public string TicketName { get; set; }
-        public decimal TotalPrice { get; set; }
+        public Guid CheckoutId { get; set; }
     }
 }

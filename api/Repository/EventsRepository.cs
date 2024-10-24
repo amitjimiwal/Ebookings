@@ -95,7 +95,7 @@ namespace Ebooking.Repository
             }
             if (EventData.AvailableTickets < tickets) return null;
             //reduce tickets and update the data
-            // EventData.AvailableTickets -= tickets;
+            // EventData. -= tickets;
             Db.Entry(EventData).Property(r => r.AvailableTickets).IsModified = true;
 
             await Db.SaveChangesAsync();

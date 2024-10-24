@@ -13,5 +13,6 @@ namespace api.Interface
         Task<List<TicketTypes>> CreateTicketForEvent(List<CreateTicketDTO> ticket, Guid eventId);
 
         Task<TicketTypes?> GetTicketTypebyID(Guid TicketTypeID);
+        Task<TicketTypes> UpdateTicketCount(Guid ticketTypeID, int count);
     }
 }

@@ -11,12 +11,12 @@ namespace api.Mapper
 {
     public static class BookingMapper
     {
-        public static Bookings CreateBookingFromDTO(this BookTicketDTO bookTicketDTO, string userId, Guid CheckoutSessionId)
+        public static Bookings CreateBookingFromDTO(this BookTicketDTO bookTicketDTO, string userId)
         {
             return new Bookings
             {
                 AppUserID = userId,
-                CheckoutSessionId = CheckoutSessionId,
+                CheckoutSessionId = bookTicketDTO.CheckoutId,
                 BookedAt = DateTime.Now,
             };
         }
@@ -52,9 +52,9 @@ namespace api.Mapper
                 AppUserID = bookings.AppUserID,
                 EventName = bookings.CheckoutSession.Event.EventName,
                 EventLocation = bookings.CheckoutSession.Event.Venue.Address,
-                BannerImages = bookings.CheckoutSession.Event.EventImages.Select(image => image.ImageUrl).ToList(),
                 Description = bookings.CheckoutSession.Event.Description,
-                EventDate = bookings.CheckoutSession.Event.Date
+                EventDate = bookings.CheckoutSession.Event.Date,
+                Tickets = bookings.CheckoutSession.Tickets.ToList()
             };
         }
     }

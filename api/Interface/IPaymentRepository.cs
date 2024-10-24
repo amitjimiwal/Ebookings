@@ -9,5 +9,9 @@ namespace api.Interface
     public interface IPaymentRepository
     {
         Task<PaymentInformation> CreatePaymentInformation(PaymentInformation paymentInformation);
+
+        Task<PaymentInformation?> GetPaymentInformation(Guid paymentInformationID);
+
+        Task<bool> UpdatePayment(PaymentInformation paymentInformation);
     }
 }

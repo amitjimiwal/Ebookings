@@ -46,5 +46,17 @@ namespace api.Repository
             var ticket = await DbContext.TicketTypes.FirstOrDefaultAsync(ticket => ticket.Id == TicketTypeID);
             return ticket;
         }
+
+        public async Task<TicketTypes> UpdateTicketCount(Guid ticketTypeID, int count)
+        {
+            var ticket = await DbContext.TicketTypes.FirstOrDefaultAsync(ticket => ticket.Id == ticketTypeID);
+            if (ticket == null)
+            {
+                throw new ArgumentException("Invalid ticketID provided.");
+            }
+            ticket.AvailableTickets -= count;
+            await DbContext.SaveChangesAsync();
+            return ticket;
+        }
     }
 }
