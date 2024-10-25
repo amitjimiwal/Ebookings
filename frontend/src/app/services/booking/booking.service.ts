@@ -29,6 +29,6 @@ export class BookingService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.tokenStorage.getToken()}`
     });
-    return this.http.delete(`http://localhost:5077/api/Bookings/cancel/${bookingId}`, { headers });
+    return this.http.delete(`http://localhost:5077/api/Bookings/cancel/${bookingId}`, { headers, responseType: 'text' });
   }
 }

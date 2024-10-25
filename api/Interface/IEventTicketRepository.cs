@@ -14,5 +14,7 @@ namespace api.Interface
 
         Task<TicketTypes?> GetTicketTypebyID(Guid TicketTypeID);
         Task<TicketTypes> UpdateTicketCount(Guid ticketTypeID, int count);
+
+        Task<TicketTypes> UpdateTicketData(TicketTypes ticketType);
     }
 }

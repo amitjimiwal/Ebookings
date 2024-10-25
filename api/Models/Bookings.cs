@@ -21,13 +21,18 @@ namespace Ebooking.Models
         [ForeignKey("AppUserID")]
         public ApplicationUser AppLicationUser { get; set; }
 
-        // [Required]
-        // public BookingStatus Status { get; set; } = BookingStatus.Pending;
+        [Required]
+        public BookingStatus Status { get; set; } = BookingStatus.Completed;
 
         [Required]
         public DateTime BookedAt { get; set; } = DateTime.Now;
 
         public Guid CheckoutSessionId { get; set; }
         public CheckoutSession CheckoutSession { get; set; } // Navigation property
+    }
+    public enum BookingStatus
+    {
+        Completed,
+        Cancelled
     }
 }

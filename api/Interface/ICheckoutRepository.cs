@@ -12,5 +12,7 @@ namespace api.Interface
 
         Task<CheckoutSession?> GetCheckoutSession(Guid checkoutSessionID);
         Task<bool> UpdateCheckoutSession(CheckoutSession checkoutSession);
+
+        Task<bool> DeleteCheckoutSession(Guid checkoutSessionID);
     }
 }

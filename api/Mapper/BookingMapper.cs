@@ -54,6 +54,8 @@ namespace api.Mapper
                 EventLocation = bookings.CheckoutSession.Event.Venue.Address,
                 Description = bookings.CheckoutSession.Event.Description,
                 EventDate = bookings.CheckoutSession.Event.Date,
+                CouponCodeApplied = bookings.CheckoutSession.CouponCode,
+                DiscountPercentage = (1/(bookings.CheckoutSession.TotalPrice / bookings.CheckoutSession.FinalAmount))*100,
                 Tickets = bookings.CheckoutSession.Tickets.ToList()
             };
         }

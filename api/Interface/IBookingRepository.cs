@@ -15,6 +15,6 @@ namespace Ebooking.Interface
 
         bool? DeleteAllBookingsForEvent(Guid eventID);
         Task<List<Bookings>> GetBookingsForUser(string userId);
-        bool? DeleteBooking(Guid bookingID);
+        Task<bool> DeleteBooking(Guid bookingID);
     }
 }

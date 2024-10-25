@@ -23,6 +23,12 @@ namespace api.Repository
             return paymentInformation;
         }
 
+        public async Task<bool> DeletePaymentInformation(Guid paymentInformationID)
+        {
+            var Data = await DbContext.PaymentInformation.Where(x => x.Id == paymentInformationID).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, PaymentStatus.Cancelled));
+            return true;
+        }
+
         public async Task<PaymentInformation?> GetPaymentInformation(Guid paymentInformationID)
         {
             var paymentInformation = await DbContext.PaymentInformation.FindAsync(paymentInformationID);

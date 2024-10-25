@@ -22,11 +22,7 @@ namespace api.Mapper
             return new CouponDTO()
             {
                 Code = couponCode.Code,
-                EventId = couponCode.Event.Id,
                 DiscountPercentage = couponCode.DiscountPercentage,
-                MaxUsage = couponCode.MaxUsage,
-                CurrentUsage = couponCode.CurrentUsage,
-                Expiry = couponCode.Expiry,
             };
         }
     }

@@ -24,6 +24,12 @@ namespace api.Repository
             return checkoutSession;
         }
 
+        public async Task<bool> DeleteCheckoutSession(Guid checkoutSessionID)
+        {
+            var Data = await DbContext.CheckoutSessions.Where(x => x.Id == checkoutSessionID).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, CheckoutStatus.Cancelled));
+            return true;
+        }
+
         public async Task<CheckoutSession?> GetCheckoutSession(Guid checkoutSessionID)
         {
             var checkoutSession = await DbContext.CheckoutSessions.FindAsync(checkoutSessionID);

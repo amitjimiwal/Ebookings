@@ -1,4 +1,6 @@
-<h1 class="text-center font-bold text-3xl my-2 container mx-auto">Your Booking History</h1>
+<h1 class="text-center font-bold text-3xl my-2 container mx-auto">
+  Your Booking History
+</h1>
 <div class="flex flex-col gap-6 container mx-auto">
   @if(bookingHistory.length === 0){
   <div class="text-center text-gray-600">
@@ -91,19 +93,38 @@
         </div>
       </div>
     </div>
-    }
-    <div class="flex justify-between items-center bg-gray-100 p-3 rounded-md">
-      <div>
-        <p class="text-sm text-gray-600">Total Price</p>
-        <p class="text-lg font-bold text-gray-800">{{ booking.totalPrice }}</p>
+    } @if(booking.couponCodeApplied){
+    <app-coupon-view
+      [couponCode]="booking.couponCodeApplied"
+      [couponDiscount]="booking.discountPercentage"
+    >
+    </app-coupon-view>
+    <div class="flex flex-col bg-gray-100 p-3 rounded-md">
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-600">Booking Price</p>
+        <p class="text-lg font-bold text-gray-800">
+          {{ booking.totalPrice * (100 / booking.discountPercentage) }}
+        </p>
       </div>
-      <div>
-        <p class="text-sm text-gray-600">Tickets</p>
-        <p class="text-lg font-bold text-gray-800">{{ booking.noOfTickets }}</p>
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-600">Discount Amount</p>
+        <p class="text-lg font-bold text-red-500">
+          -{{
+            booking.totalPrice * (100 / booking.discountPercentage) -
+              booking.totalPrice
+          }}
+        </p>
       </div>
     </div>
+    }
 
-    <div class="text-sm text-gray-600">
+    <div class="flex flex-col bg-gray-100 p-3 rounded-md">
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-600">Final Price</p>
+        <p class="text-lg font-bold text-black">{{ booking.totalPrice }}</p>
+      </div>
+    </div>
+    <div class="text-sm text-gray-600 mt-3">
       <p>Booked on: {{ booking.bookedAt }}</p>
     </div>
     <button

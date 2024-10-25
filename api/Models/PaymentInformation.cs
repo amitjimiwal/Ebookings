@@ -55,6 +55,7 @@ namespace api.Models
     {
         Pending,
         Completed,
-        Failed
+        Failed,
+        Cancelled
     }
 }

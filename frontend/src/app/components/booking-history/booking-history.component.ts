@@ -3,11 +3,12 @@ import { EventBooking } from '../../models/interface/booking';
 import { BookingService } from '../../services/booking/booking.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { CouponViewComponent } from '../coupon-view/coupon-view.component';
 
 @Component({
   selector: 'app-booking-history',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CouponViewComponent],
   templateUrl: './booking-history.component.html',
   styleUrl: './booking-history.component.css'
 })

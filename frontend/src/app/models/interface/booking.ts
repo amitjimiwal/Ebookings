@@ -13,6 +13,8 @@ export interface EventBooking {
      totalPrice: number; // Total price for the tickets
      appUserID: string; // Unique identifier for the user in the app
      tickets: Ticket[]; // Array of tickets booked
+     couponCodeApplied: string | null;
+     discountPercentage: number;
 }
 interface Ticket {
      ticketTypeId: string;

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.DTO.Bookings;
+using api.Interface;
 using api.Mapper;
 using api.Models;
+using api.Repository;
 using Ebooking.DTO.Bookings;
 using Ebooking.Interface;
 using Ebooking.Models;
@@ -20,16 +22,23 @@ namespace Ebooking.Controllers
     public class BookingsController : ControllerBase
     {
         private readonly IBookingRepository BookingRepository;
-        private readonly IEventRepository EventRepository;
+        private readonly ICheckoutRepository CheckoutRepository;
 
+        private readonly IEventTicketRepository EventTicketRepository;
+        private readonly IPaymentRepository PaymentRepository;
+
+        private readonly ICouponCodeRepository CouponCodeRepository;
         private readonly UserManager<ApplicationUser> userManager;
-        public BookingsController(IBookingRepository repository, IEventRepository eventRepository, UserManager<ApplicationUser> manager)
+        public BookingsController(IBookingRepository repository, UserManager<ApplicationUser> manager, ICheckoutRepository checkout, IEventTicketRepository eventTicketRepository, IPaymentRepository P, ICouponCodeRepository couponCodeRepository)
         {
             BookingRepository = repository;
-            EventRepository = eventRepository;
             userManager = manager;
+            CheckoutRepository = checkout;
+            EventTicketRepository = eventTicketRepository;
+            PaymentRepository = P;
+            CouponCodeRepository = couponCodeRepository;
         }
-        
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> GetBookingsForUser()
@@ -48,6 +57,7 @@ namespace Ebooking.Controllers
             {
                 return NotFound("No Bookings Found");
             }
+
             //convert to DTO
             var bookingsDTO = bookings.Select(booking => booking.CreateUserBookingDTOFromBooking());
             return Ok(bookingsDTO);
@@ -82,9 +92,8 @@ namespace Ebooking.Controllers
                 return BadRequest("You can't cancel this booking.");
             }
 
-
             //get the event details
-            var eventData = await EventRepository.GetEventById(bookingData.CheckoutSession.EventId);
+            var eventData = bookingData.CheckoutSession.Event;
             if (eventData == null)
             {
                 return NotFound("Event Not Found");
@@ -96,19 +105,39 @@ namespace Ebooking.Controllers
                 return BadRequest("Can't Cancel Booking 2 days before the event.");
             }
 
+
+            //cancel the checkout session
+            var checkoutSession = await CheckoutRepository.DeleteCheckoutSession(bookingData.CheckoutSessionId);
+            if (!checkoutSession)
+            {
+                return StatusCode(500, "An error occurred while cancelling checkout session.");
+            }
+
+            //cancel the payment session
+            var paymentSession = await PaymentRepository.DeletePaymentInformation(bookingData.CheckoutSession.PaymentInformation.Id);
+            if (!paymentSession)
+            {
+                return StatusCode(500, "An error occurred while cancelling payment session.");
+            }
+
             //delete the booking 
-            var bookingDeleted = BookingRepository.DeleteBooking(cancelBookingID);
-            if (bookingDeleted == false)
+            var bookingDeleted = await BookingRepository.DeleteBooking(cancelBookingID);
+            if (!bookingDeleted)
             {
                 return StatusCode(500, "An error occurred while deleting the booking.");
             }
-            //update the event available tickets
-            // var eventObj = await EventRepository.IncreaseEventTicketCount(bookingData.EventId, bookingData.NoOfTickets);
-            // if (eventObj == null)
-            // {
-            //     return StatusCode(500, "An error occurred while updating the event tickets.");
-            // }
-            return Ok();
+            //update the ticket count in the db
+            foreach (var ticket in bookingData.CheckoutSession.Tickets)
+            {
+                var ticketObj = await EventTicketRepository.GetTicketTypebyID(ticket.TicketTypeId);
+                if (ticketObj == null || ticketObj.EventId != eventData.Id)
+                {
+                    return StatusCode(500, "Error occurred while getting ticket types");
+                }
+                ticketObj.AvailableTickets += ticket.Quantity;
+                await EventTicketRepository.UpdateTicketData(ticketObj);
+            }
+            return Ok("Successfully Cancelled the Booking");
         }
     }
 }

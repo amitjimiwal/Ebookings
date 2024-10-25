@@ -58,5 +58,11 @@ namespace api.Repository
             await DbContext.SaveChangesAsync();
             return ticket;
         }
+
+        public async Task<TicketTypes> UpdateTicketData(TicketTypes ticketType)
+        {
+            var TicketData = await DbContext.TicketTypes.Where(x => x.Id == ticketType.Id).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.AvailableTickets, ticketType.AvailableTickets).SetProperty(x => x.TotalTickets, ticketType.TotalTickets).SetProperty(x => x.TicketPrice, ticketType.TicketPrice).SetProperty(x => x.DisplayName, ticketType.DisplayName));
+            return ticketType;
+        }
     }
 }

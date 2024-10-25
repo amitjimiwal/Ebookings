@@ -13,5 +13,7 @@ namespace api.Interface
         Task<PaymentInformation?> GetPaymentInformation(Guid paymentInformationID);
 
         Task<bool> UpdatePayment(PaymentInformation paymentInformation);
+
+        Task<bool> DeletePaymentInformation(Guid paymentInformationID);
     }
 }

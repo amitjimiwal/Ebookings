@@ -36,17 +36,15 @@ namespace Ebooking.Repository
             return true;
         }
 
-        public bool? DeleteBooking(Guid bookingID)
+        public async Task<bool> DeleteBooking(Guid bookingID)
         {
-            var BookingData = Db.Bookings.FirstOrDefault(item => item.Id == bookingID);
-            if (BookingData == null) return false;
-            Db.Bookings.Remove(BookingData);
+            var BookingData = await Db.Bookings.Where(item => item.Id == bookingID).ExecuteUpdateAsync(setters => setters.SetProperty(x => x.Status, BookingStatus.Cancelled));
             return true;
         }
 
         public async Task<Bookings?> GetBookingByIDAsync(Guid guid)
         {
-            Bookings? BookingData = await Db.Bookings.FirstOrDefaultAsync(item => item.Id == guid);
+            Bookings? BookingData = await Db.Bookings.Include(b => b.CheckoutSession).Include(b => b.CheckoutSession.PaymentInformation).Include(b => b.CheckoutSession.Event).FirstOrDefaultAsync(item => item.Id == guid);
 
             if (BookingData == null) return null;
             return BookingData;
@@ -58,7 +56,7 @@ namespace Ebooking.Repository
             var BookingsForEventByUser = Db.Bookings.Include(b => b.CheckoutSession).AsQueryable();
 
             //filter out the bookings of user
-            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppLicationUser.Id == appUserID && booking.CheckoutSession.EventId == eventId);
+            BookingsForEventByUser = BookingsForEventByUser.Where(booking => booking.AppLicationUser.Id == appUserID && booking.CheckoutSession.EventId == eventId && booking.Status == BookingStatus.Completed);
 
             //find the total sum od tickets purchased by the user
             var totalBookings = await BookingsForEventByUser.SumAsync(booking => booking.CheckoutSession.TotalTicketsPurchased);
@@ -69,7 +67,7 @@ namespace Ebooking.Repository
         public async Task<List<Bookings>> GetBookingsForUser(string userId)
         {
             var bookingsData = Db.Bookings.Include(b => b.CheckoutSession).Include(b => b.CheckoutSession.PaymentInformation).Include(b => b.CheckoutSession.Event).AsQueryable();
-            var b = await bookingsData.Where(x => x.AppUserID == userId).ToListAsync();
+            var b = await bookingsData.Where(x => x.AppUserID == userId && x.Status == BookingStatus.Completed).ToListAsync();
             return b;
         }
     }
