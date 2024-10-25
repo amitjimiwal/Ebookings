@@ -59,7 +59,6 @@ namespace api.Controllers
             /* 
                 FLOW
             */
-
             //get the user from the claims
             var username = User.GetUserName();
             var user = await _userManager.FindByNameAsync(username);
@@ -88,12 +87,6 @@ namespace api.Controllers
             else
             {
                 createCheckoutSessionDTO.FinalAmount = createCheckoutSessionDTO.TotalPrice;
-            }
-
-            // validate the dto first - 1. check total price , total tickets (sum)
-            if (!createCheckoutSessionDTO.IsDTOPriceAccurate() || !createCheckoutSessionDTO.IsDTOTicketsCountAccurate())
-            {
-                return BadRequest("DTO is not accurate in terms of price or tickets count");
             }
 
             //validate booking count doesn't exceed the limit of booking per account
@@ -220,10 +213,11 @@ namespace api.Controllers
 
             //get checkout session
             var CheckoutData = await CheckoutRepository.GetCheckoutSession(createPaymentDTO.CheckoutID);
-            if (CheckoutData == null || CheckoutData.IsCheckoutSessionExpired || CheckoutData.Status != Models.CheckoutStatus.Pending || CheckoutData.AppUserID != user.Id)
+            if (CheckoutData == null || CheckoutData.IsCheckoutSessionExpired || CheckoutData.Status != Models.CheckoutStatus.Pending)
             {
                 return BadRequest("Checkout Session not found or is Expired");
             }
+            //TODO: || CheckoutData.AppUserID != user.Id this validation after altering database
 
             //get payment session
             var PaymentData = await PaymentRepository.GetPaymentInformation(createPaymentDTO.PaymentID);

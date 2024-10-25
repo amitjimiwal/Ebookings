@@ -38,7 +38,7 @@ namespace api.DTO.Checkout
         public bool IsDTOPriceAccurate()
         {
             Console.WriteLine(FinalAmount);
-            return FinalAmount == Tickets.Sum(x => x.TicketQuantity * x.SingleticketPrice);
+            return FinalAmount == Tickets.Sum(x => x.TicketQuantity * x.SingleticketPrice) - DiscountAmount;
         }
         public bool IsDTOTicketsCountAccurate()
         {
