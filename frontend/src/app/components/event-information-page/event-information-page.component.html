@@ -1,4 +1,8 @@
 <event-description [event]="eventData"></event-description>
 @if(eventData){
-<app-ticket-box [ticketData]="eventData.ticketTypes"></app-ticket-box>
+<app-ticket-box
+  [ticketData]="eventData.ticketTypes"
+  [event]="eventData"
+></app-ticket-box>
+<app-cart-bottom-navbar></app-cart-bottom-navbar>
 }

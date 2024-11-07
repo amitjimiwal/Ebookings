@@ -2,15 +2,30 @@
   <h2 class="text-2xl font-bold mb-6">Select Tickets</h2>
   <div class="space-y-4">
     @for (ticket of ticketData; track ticket.id) {
-    <div class="bg-white rounded-lg shadow-md p-4">
+    <div
+      class="bg-white rounded-lg shadow-md p-4 flex justify-between items-center"
+    >
       <div class="flex justify-between items-center">
         <div>
-          <h3 class="text-lg font-bold text-red-500">{{ ticket.displayName }}</h3>
+          <h3 class="text-lg font-bold text-red-500">
+            {{ ticket.displayName }}
+          </h3>
           <p class="text-gray-500">₹{{ ticket.ticketPrice }}</p>
           <p class="text-sm text-gray-500 text-yellow-600">
             Available: {{ ticket.availableTickets }}
           </p>
         </div>
+      </div>
+      <div>
+        <input
+          type="number"
+          class="w-16 h-10 border border-gray-300 rounded-md mt-4 pl-3"
+          id="ticket-{{ ticket.id }}"
+          [disabled]="isBookingAllowed"
+          max="{{ event?.maxTicketsPerPerson }}"
+          min="0"
+          (change)="updateTicketQuantity(ticket.id, $event)"
+        />
       </div>
     </div>
     }

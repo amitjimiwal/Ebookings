@@ -4,11 +4,12 @@ import { EventDescriptionComponent } from '../event-description-box/event-descri
 import { TicketBoxComponent } from '../ticket-box/ticket-box.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EventService } from '../../services/event/event.service';
+import { CartBottomNavbarComponent } from '../cart-bottom-navbar/cart-bottom-navbar.component';
 
 @Component({
   selector: 'app-event-information-page',
   standalone: true,
-  imports: [EventDescriptionComponent, TicketBoxComponent],
+  imports: [EventDescriptionComponent, TicketBoxComponent, CartBottomNavbarComponent],
   templateUrl: './event-information-page.component.html',
   styleUrl: './event-information-page.component.css'
 })
@@ -29,5 +30,6 @@ export class EventInformationPageComponent implements OnInit {
     }, () => {
       console.log(`Event with id ${eventId} data fetched successfully`);
     });
+    
   }
 }

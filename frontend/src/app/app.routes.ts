@@ -8,6 +8,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile.component';
 import { BookingHistoryComponent } from './components/booking-history/booking-history.component';
 import { EventInformationPageComponent } from './components/event-information-page/event-information-page.component';
+import { CartComponent } from './components/cart/cart.component';
+import { CheckoutPageComponent } from './components/checkout-page/checkout-page.component';
 
 export const routes: Routes = [
      {
@@ -42,5 +44,14 @@ export const routes: Routes = [
      }, {
           path: 'events/buy-page/:id',
           component: EventInformationPageComponent
+     }, {
+          path: 'cart',
+          component: CartComponent,
+          canActivate: [AuthGuard]
+     },
+     {
+          path: 'checkout',
+          component: CheckoutPageComponent,
+          canActivate: [AuthGuard]
      }
 ];
