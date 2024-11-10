@@ -35,5 +35,27 @@ namespace api.Mapper
                 }).ToList()
             };
         }
+        public static CreateCheckoutSessionDTO CreateCheckoutSessionDTOFromCheckout(this CheckoutSession checkoutSession)
+        {
+            return new CreateCheckoutSessionDTO()
+            {
+                Name = checkoutSession.Name,
+                Email = checkoutSession.Email,
+                PhoneNumber = checkoutSession.PhoneNumber,
+                EventId = checkoutSession.EventId,
+                TotalTickets = checkoutSession.TotalTicketsPurchased,
+                TotalPrice = checkoutSession.TotalPrice,
+                CouponCode = checkoutSession.CouponCode,
+                DiscountAmount = checkoutSession.DiscountAmount,
+                FinalAmount = checkoutSession.FinalAmount,
+                Tickets = checkoutSession.Tickets.Select(ticket => new TicketDetails()
+                {
+                    TicketId = ticket.TicketTypeId,
+                    TicketQuantity = ticket.Quantity,
+                    SingleticketPrice = ticket.TotalPrice / ticket.Quantity,
+                    TicketDisplayName = ticket.TicketName
+                }).ToList()
+            };
+        }
     }
 }

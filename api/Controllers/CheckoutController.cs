@@ -148,6 +148,7 @@ namespace api.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet]
         [Route("/CouponCode")]
         public async Task<IActionResult> ValidateCouponCodeAndReturn([FromQuery] string Code, [FromQuery] Guid EventID)
@@ -325,6 +326,28 @@ namespace api.Controllers
                 PaymentID = paymentData.Id
             });
         }
-    }
 
+        [Authorize]
+        [HttpGet("Session/{checkoutID}")]
+        public async Task<IActionResult> GetCheckoutSession([FromRoute] Guid checkoutID)
+        {
+            //get the user from the claims
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return BadRequest("User not found");
+            }
+            var checkoutData = await CheckoutRepository.GetCheckoutSession(checkoutID);
+            if (checkoutData == null)
+            {
+                return NotFound("Checkout Session Not Found");
+            }
+            // if (user.Id != checkoutData.AppUserID)
+            // {
+            //     return Unauthorized("Unauthorized Checkout");
+            // }
+            return Ok(checkoutData.CreateCheckoutSessionDTOFromCheckout());
+        }
+    }
 }

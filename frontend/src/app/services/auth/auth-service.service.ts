@@ -6,13 +6,14 @@ import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { AppUser } from '../../models/interface/user';
 import { LoginDto, RegisterDto } from '../../models/interface/auth';
+import { CartService } from '../cart/cart.service';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private UserSubject: BehaviorSubject<AppUser | null>;
   public currentUser: Observable<AppUser | null>;
-  constructor(private httpClient: HttpClient, private tokenStorage: TokenService, private userStorage: UserInfoService, private router: Router) {
+  constructor(private httpClient: HttpClient, private tokenStorage: TokenService, private userStorage: UserInfoService, private router: Router, private cartService: CartService) {
     //kind of global state to hold user data
     this.UserSubject = new BehaviorSubject(this.userStorage.getUser());
 
@@ -37,6 +38,7 @@ export class AuthService {
     this.userStorage.removeUser();
     this.UserSubject.next(null);
     this.router.navigate(['/login']);
+    this.cartService.deleteCart();
   }
 
   //signup

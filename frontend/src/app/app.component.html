@@ -25,6 +25,17 @@
         class="text-black text-xl font-bold hover:text-gray-300"
         >Profile</a
       >
+      <a
+        [routerLink]="['/cart']"
+        class="text-black text-xl font-bold hover:text-gray-700 relative"
+        ><fa-icon [icon]="cartIcon" class="mr-2"></fa-icon>
+        <div
+          class="absolute  text-red-600 -top-3 -right-2"
+          *ngIf="cartItems > 0"
+        >
+          {{ cartItems }}
+        </div>
+      </a>
       } @else{
       <a
         [routerLink]="['/login']"

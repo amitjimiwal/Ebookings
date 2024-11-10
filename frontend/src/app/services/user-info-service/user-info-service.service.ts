@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/htt
 import { map, Observable } from 'rxjs';
 import { UpdateUserDto } from '../../models/interface/auth';
 import { Router } from '@angular/router';
+import { AppUser } from '../../models/interface/user';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class UserInfoService {
   }
 
   //getUser
-  getUser(): any {
+  getUser(): AppUser | null {
     const data = localStorage.getItem(this.USER_TOKEN_NAME);
     return data ? JSON.parse(data) : null;
   }

@@ -32,7 +32,7 @@ namespace api.Repository
 
         public async Task<CheckoutSession?> GetCheckoutSession(Guid checkoutSessionID)
         {
-            var checkoutSession = await DbContext.CheckoutSessions.FindAsync(checkoutSessionID);
+            var checkoutSession = await DbContext.CheckoutSessions.Include(checkout => checkout.PaymentInformation).FirstOrDefaultAsync(x => x.Id == checkoutSessionID);
             return checkoutSession;
         }
 

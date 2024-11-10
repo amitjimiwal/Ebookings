@@ -104,4 +104,12 @@ export class CartService {
       }
     }
   }
+
+  getCart(): Cart | null {
+    const currentCart = this.cartSubject.value;
+    if (currentCart) {
+      return currentCart;
+    }
+    return null;
+  }
 }

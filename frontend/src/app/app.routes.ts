@@ -10,6 +10,7 @@ import { BookingHistoryComponent } from './components/booking-history/booking-hi
 import { EventInformationPageComponent } from './components/event-information-page/event-information-page.component';
 import { CartComponent } from './components/cart/cart.component';
 import { CheckoutPageComponent } from './components/checkout-page/checkout-page.component';
+import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
 
 export const routes: Routes = [
      {
@@ -48,10 +49,14 @@ export const routes: Routes = [
           path: 'cart',
           component: CartComponent,
           canActivate: [AuthGuard]
-     },
-     {
+     },{
           path: 'checkout',
           component: CheckoutPageComponent,
+          canActivate: [AuthGuard]
+     },
+     {
+          path: 'checkout-payment/:checkoutID/:paymentID',
+          component: CheckoutPaymentComponent,
           canActivate: [AuthGuard]
      }
 ];
