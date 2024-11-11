@@ -343,10 +343,12 @@ namespace api.Controllers
             {
                 return NotFound("Checkout Session Not Found");
             }
-            // if (user.Id != checkoutData.AppUserID)
-            // {
-            //     return Unauthorized("Unauthorized Checkout");
-            // }
+
+            //check if the user is authorized to view the checkout session
+            if (user.Id != checkoutData.AppUserID)
+            {
+                return Unauthorized("Unauthorized Checkout");
+            }
             return Ok(checkoutData.CreateCheckoutSessionDTOFromCheckout());
         }
     }

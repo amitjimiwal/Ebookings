@@ -13,31 +13,6 @@ import { PaymentService } from '../../services/payment/payment.service';
   templateUrl: './checkout-payment.component.html',
   styleUrl: './checkout-payment.component.css'
 })
-// {
-//   name: "Rishabh",
-//   email: "Rishabh@example.com",
-//   phoneNumber: "8765438889",
-//   eventId: "77b22bb6-1794-4652-3878-08dcf4c11082",
-//   tickets: [
-//     {
-//       ticketId: "e67b2923-9266-4f63-a525-77977b4d25ae",
-//       ticketQuantity: 2,
-//       singleticketPrice: 1500,
-//       ticketDisplayName: "REGULAR"
-//     },
-//     {
-//       ticketId: "44e110e7-b3df-4d80-ad4b-7a6908218c2b",
-//       ticketQuantity: 3,
-//       singleticketPrice: 2500,
-//       ticketDisplayName: "PREMIUM"
-//     }
-//   ],
-//   totalTickets: 5,
-//   totalPrice: 10500,
-//   couponCode: "",
-//   discountAmount: null,
-//   finalAmount: 10500
-// };
 export class CheckoutPaymentComponent {
   orderData: OrderSummary | undefined = undefined
   paymentForm: FormGroup;
